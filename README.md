@@ -2,7 +2,7 @@
 
 The Opensocial-Wordpress-Plugin is a plugin allowing your users to easily authenticate into your Wordpress site.
 
-OpenSocial is a SSO one-click service allowing users to authenticate with the follwoing account tyepes:
+OpenSocial is a SSO one-click service allowing users to authenticate with the following account types:
 
 * Facebook
 * Github
