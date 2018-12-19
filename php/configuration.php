@@ -10,6 +10,40 @@ require_once "compatibility.php";
 require_once (dirname(__FILE__) . "/lib/Saml2/Constants.php");
 require_once (dirname(__FILE__) . "/extlib/xmlseclibs/xmlseclibs.php");
 
+require_once "api.php";
+$api = new opSAMLapiCall;
+
+/* Check if there is post for site logo or background upload request */
+if (array_key_exists('upload_site_logo', $_POST))
+{
+  if (empty($_POST['logo_url'])) {
+    pass;
+  } else {
+    update_option('opensocial_saml_site_logo', $_POST['logo_url']);  
+    $post_data = array(
+      'identity'  => esc_url(get_site_url()),
+      'site_logo' => $_POST['logo_url']
+    );
+    $data = json_encode($post_data);
+    $msg = $api->updateData('subscriber', $data);
+  }
+}
+
+if (array_key_exists('upload_site_background', $_POST))
+{
+  if (empty($_POST['bg_url'])) {
+    pass;
+  } else {
+    update_option('opensocial_saml_site_background', $_POST['bg_url']);
+    $post_data = array(
+      'identity'  => esc_url(get_site_url()),
+      'site_bg' => $_POST['bg_url']
+    );
+    $data = json_encode($post_data);
+    $msg = $api->updateData('subscriber', $data);
+  }
+}
+
 function plugin_section_status_text() {
   echo "<p>".__("Use this flag for enable or disable the SAML support.", 'opensocial-saml-sso')."</p>";
 }
@@ -36,15 +70,46 @@ function plugin_permission_text() {
   echo "<p>".__("This section customizes the permission behavior of your site.", 'opensocial-saml-sso')."</p>";
 }
 
+function plugin_branding_text() {
+  echo "<p>".__("Enter terms of use and privacy url which will display on login page.", 'opensocial-saml-sso')."</p>";
+}
+
 function plugin_setting_boolean_opensocial_permission_enabled() {
   ?>
-  Open: <input type="radio" name="opensocial_permission_enabled" id="opensocial_permission_enabled" value="open" <?php checked('open', get_option('opensocial_permission_enabled'), true); ?>> &nbsp;
-  Closed: <input type="radio" name="opensocial_permission_enabled" id="opensocial_permission_enabled" value="closed" <?php checked('closed', get_option('opensocial_permission_enabled'), true);?> >
+  Open: <input type="radio" name="opensocial_permission_enabled" id="opensocial_permission_enabled" value="Open" <?php checked('Open', get_option('opensocial_permission_enabled'), true); ?>> &nbsp;
+  Closed: <input type="radio" name="opensocial_permission_enabled" id="opensocial_permission_enabled" value="Closed" <?php checked('Closed', get_option('opensocial_permission_enabled'), true);?> >
   <p class="description"><?php echo __("Select the <strong>(Open)</strong> option if you want to let any one login on your site.", 'opensocial-saml-sso');?></p>
   <?php
 }
 
+function plugin_setting_boolean_opensocial_closed_enabled() {
+  echo '<div class="op_closed_msg">';
+  echo '<textarea rows="4" cols="50" name="opensocial_closed_message" id="opensocial_closed_message">'.esc_attr(get_option('opensocial_closed_message')).'</textarea>';
+  echo '<p class="description">'.__("Put the site closed message.", "opensocial-saml-sso").'</p>';
+  echo '</div>';
+}
+
+function plugin_setting_boolean_opensocial_terms_enabled() {
+  echo '<input type="text" required="" name="opensocial_terms_enabled" id="opensocial_terms_enabled"  value= "'.esc_attr(get_option('opensocial_terms_enabled')).'" size="80">';
+}
+
+function plugin_setting_boolean_opensocial_privacy_enabled() {
+  echo '<input type="text" required="" name="opensocial_privacy_enabled" id="opensocial_privacy_enabled" value= "'.esc_attr(get_option('opensocial_privacy_enabled')).'" size="80">';
+}
+
+function opensocial_announce_message() {
+  echo '<textarea rows="4" cols="50" name="opensocial_announce_message" id="opensocial_announce_message">'.esc_attr(get_option('opensocial_announce_message')).'</textarea>';
+  echo '<p class="description">'.__("Put the announcement message here which display on login page.", "opensocial-saml-sso").'</p>';
+}
+
+function plugin_setting_boolean_opensocial_help_enabled() {
+  echo '<input type="text" required="" name="opensocial_help_enabled" id="opensocial_help_enabled" value= "'.esc_attr(get_option('opensocial_help_enabled')).'" size="80">';
+  echo '<p class="description">'.__("Define the email address so users can send an email in case of login issues.", "opensocial-saml-sso").'</p>';
+}
+
 function opensocial_saml_configuration_render() {
+  require_once "api.php";
+  $api = new opSAMLapiCall;
   $title = __("SSO/SAML Settings", 'opensocial-saml-sso');
   ?>
     <div class="wrap">
@@ -61,13 +126,35 @@ function opensocial_saml_configuration_render() {
         <?php settings_fields('opensocial_saml_configuration'); ?>
         <?php do_settings_sections('opensocial_saml_configuration'); ?>
 
-        <div style="margin-top: 10px;"><strong>Note:</strong> You can use <strong>[opensocial_login_button]</strong> shortcode to display OpenSocial login button anywhere on your site.</div>
-
         <p class="submit">
           <input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
         </p>
 
+        <!-- Update privacy and terms of url in opensocial databaes -->
+        <?php
+        $post_data = array(
+          'identity'  => esc_url(get_site_url()),
+          'terms_of_use' => esc_attr(get_option('opensocial_terms_enabled')),
+          'privacy_statement' => esc_attr(get_option('opensocial_privacy_enabled')),
+          'need_help' => esc_attr(get_option('opensocial_help_enabled')),
+          'site_mode' => esc_attr(get_option('opensocial_permission_enabled')),
+          'message' => esc_attr(get_option('opensocial_announce_message')),
+          'closed_message' => esc_attr(get_option('opensocial_closed_message'))
+        );
+        $data = json_encode($post_data);
+        $msg = $api->updateData('subscriber', $data);
+        ?>
+
       </form>
+
+        <?php
+          /* Include Site logo upload function */
+          require_once "site_logo_upload.php";
+          require_once "background_upload.php";
+        ?>
+      
+    <div style="margin-top: 30px;"><strong>Note:</strong> You can use <strong>[opensocial_login_button]</strong> shortcode to display OpenSocial login button anywhere on your site.</div>
+
     </div>
   <?php
 }
@@ -99,7 +186,41 @@ function opensocial_saml_configuration() {
   add_settings_section('permissions', __('Permissions', 'opensocial-saml-sso'), 'plugin_permission_text', $option_group);
   register_setting($option_group, 'opensocial_permission_enabled');
   add_settings_field('opensocial_permission_enabled', __('Permission Type', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_permission_enabled", $option_group, 'permissions');
+  register_setting($option_group, 'opensocial_closed_message');
+  add_settings_field('opensocial_closed_message', __('', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_closed_enabled", $option_group, 'permissions');
+
+  /* Terms of use */
+  add_settings_section('site_branding', __('Site Branding', 'opensocial-saml-sso'), 'plugin_branding_text', $option_group);
+  register_setting($option_group, 'opensocial_terms_enabled');
+  add_settings_field('opensocial_terms_enabled', __('Terms of use URL', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_terms_enabled", $option_group, 'site_branding');
+  register_setting($option_group, 'opensocial_privacy_enabled');
+  add_settings_field('opensocial_privacy_enabled', __('Privacy URL', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_privacy_enabled", $option_group, 'site_branding');
+  register_setting($option_group, 'opensocial_announce_message');
+  add_settings_field('opensocial_announce_message', __('Message', 'opensocial-saml-sso'), "opensocial_announce_message", $option_group, 'site_branding');
+  register_setting($option_group, 'opensocial_help_enabled');
+  add_settings_field('opensocial_help_enabled', __('Need Help?', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_help_enabled", $option_group, 'site_branding');
 
 }
 
+add_action( 'admin_footer', 'display_closed_message_box' );
+function display_closed_message_box() {
+	?><script type='text/javascript'>
+  var sitemode = '<?php echo get_option('opensocial_permission_enabled'); ?>';
+  if ( sitemode === 'Closed') {
+    jQuery('.op_closed_msg').show();
+  } else {
+    jQuery('.op_closed_msg').hide();
+  }
+
+  jQuery(':radio').change(function (event) {
+    var permission = $(this).val();
+    if ( permission == 'Closed') {
+      jQuery('.op_closed_msg').show();
+    } else {
+      jQuery('.op_closed_msg').hide();
+    }
+  });
+
+  </script><?php
+} 
 ?>

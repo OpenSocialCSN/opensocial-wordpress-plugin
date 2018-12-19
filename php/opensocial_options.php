@@ -6,6 +6,9 @@
     exit;
   }
 
+  // $urlparts = parse_url(site_url());
+  // $domain = $urlparts[host];
+
   function op_set_options() 
   {
    
@@ -39,6 +42,7 @@ jQ==
 -----END CERTIFICATE-----
 ');
 
+    update_option('opensocial_saml_keep_local_login', '');
     update_option('opensocial_saml_forcelogin', '');
     update_option('opensocial_saml_autocreate', 'on');
     update_option('opensocial_saml_updateuser', 'on');
@@ -57,7 +61,9 @@ jQ==
     update_option('opensocial_saml_advanced_digestalgorithm', 'http://www.w3.org/2000/09/xmldsig#rsa-sha1');
     update_option('opensocial_saml_advanced_nameidformat', 'emailAddress');
     update_option('opensocial_saml_advanced_settings_sp_entity_id',  esc_url(get_site_url()));
-    update_option('opensocial_permission_enabled',  'open');
+    //update_option('opensocial_terms_enabled',  esc_url(get_site_url()));
+    //update_option('opensocial_privacy_enabled',  esc_url(get_site_url()));
+    update_option('opensocial_permission_enabled',  'Open');
 
     return true;
 
@@ -90,6 +96,15 @@ jQ==
     delete_option('opensocial_saml_advanced_digestalgorithm');
     delete_option('opensocial_saml_advanced_nameidformat');
     delete_option('opensocial_saml_advanced_settings_sp_entity_id');
+    delete_option('opensocial_permission_enabled');
+    delete_option('opensocial_saml_keep_local_login');
+    delete_option('opensocial_terms_enabled');
+    delete_option('opensocial_privacy_enabled');
+    delete_option('opensocial_saml_site_logo');
+    delete_option('opensocial_saml_site_background');
+    delete_option('opensocial_help_enabled');
+    delete_option('opensocial_announce_message');
+    delete_option('opensocial_closed_message');
 
     return true;
 
