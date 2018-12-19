@@ -6,6 +6,7 @@
     exit;
   }
 
+  require_once "functions.php";
   require_once "api.php";
 
   function op_register_site()
@@ -18,6 +19,7 @@
 
     $post_data = array(
       'identity' => $identity,
+      'domain' => get_domain_name(),
       'acs' => $acs,
       'sls' => $sls
     );
