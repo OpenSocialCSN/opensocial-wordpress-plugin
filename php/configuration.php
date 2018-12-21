@@ -97,10 +97,15 @@ function plugin_setting_boolean_opensocial_privacy_enabled() {
   echo '<input type="text" required="" name="opensocial_privacy_enabled" id="opensocial_privacy_enabled" value= "'.esc_attr(get_option('opensocial_privacy_enabled')).'" size="80">';
 }
 
+function opensocial_announce_message_title() {
+  echo '<input type="text" name="opensocial_announce_message_title" id="opensocial_announce_message_title" value= "'.esc_attr(get_option('opensocial_announce_message_title')).'" size="52" style="margin-bottom: 0px;">';
+}
+
 function opensocial_announce_message() {
   echo '<textarea rows="4" cols="50" name="opensocial_announce_message" id="opensocial_announce_message">'.esc_attr(get_option('opensocial_announce_message')).'</textarea>';
   echo '<p class="description">'.__("Put the announcement message here which display on login page.", "opensocial-saml-sso").'</p>';
 }
+
 
 function plugin_setting_boolean_opensocial_help_enabled() {
   echo '<input type="text" required="" name="opensocial_help_enabled" id="opensocial_help_enabled" value= "'.esc_attr(get_option('opensocial_help_enabled')).'" size="80">';
@@ -138,6 +143,7 @@ function opensocial_saml_configuration_render() {
           'privacy_statement' => esc_attr(get_option('opensocial_privacy_enabled')),
           'need_help' => esc_attr(get_option('opensocial_help_enabled')),
           'site_mode' => esc_attr(get_option('opensocial_permission_enabled')),
+          'message_title' => esc_attr(get_option('opensocial_announce_message_title')),
           'message' => esc_attr(get_option('opensocial_announce_message')),
           'closed_message' => esc_attr(get_option('opensocial_closed_message'))
         );
@@ -195,8 +201,10 @@ function opensocial_saml_configuration() {
   add_settings_field('opensocial_terms_enabled', __('Terms of use URL', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_terms_enabled", $option_group, 'site_branding');
   register_setting($option_group, 'opensocial_privacy_enabled');
   add_settings_field('opensocial_privacy_enabled', __('Privacy URL', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_privacy_enabled", $option_group, 'site_branding');
+  register_setting($option_group, 'opensocial_announce_message_title');
+  add_settings_field('opensocial_announce_message_title', __('Message Title', 'opensocial-saml-sso'), "opensocial_announce_message_title", $option_group, 'site_branding');
   register_setting($option_group, 'opensocial_announce_message');
-  add_settings_field('opensocial_announce_message', __('Message', 'opensocial-saml-sso'), "opensocial_announce_message", $option_group, 'site_branding');
+  add_settings_field('opensocial_announce_message', __('Message Details', 'opensocial-saml-sso'), "opensocial_announce_message", $option_group, 'site_branding');
   register_setting($option_group, 'opensocial_help_enabled');
   add_settings_field('opensocial_help_enabled', __('Need Help?', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_help_enabled", $option_group, 'site_branding');
 
