@@ -221,7 +221,7 @@ function display_closed_message_box() {
   }
 
   jQuery(':radio').change(function (event) {
-    var permission = $(this).val();
+    var permission = jQuery(this).val();
     if ( permission == 'Closed') {
       jQuery('.op_closed_msg').show();
     } else {
