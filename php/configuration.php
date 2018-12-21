@@ -126,7 +126,7 @@ function opensocial_saml_configuration_render() {
       </div>
       <div style="clear:both"></div>
       <h2><?php echo esc_html( $title ); ?></h2>
-      <form action="options.php" method="post">
+      <form action="options.php" method="post" name="op_configuration" id="op_configuration">
 
         <?php settings_fields('opensocial_saml_configuration'); ?>
         <?php do_settings_sections('opensocial_saml_configuration'); ?>
@@ -220,7 +220,7 @@ function display_closed_message_box() {
     jQuery('.op_closed_msg').hide();
   }
 
-  jQuery(':radio').change(function (event) {
+  jQuery('#op_configuration :radio').change(function (event) {
     var permission = jQuery(this).val();
     if ( permission == 'Closed') {
       jQuery('.op_closed_msg').show();
