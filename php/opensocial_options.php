@@ -103,9 +103,9 @@ jQ==
     delete_option('opensocial_saml_site_logo');
     delete_option('opensocial_saml_site_background');
     delete_option('opensocial_help_enabled');
+    delete_option('opensocial_announce_message_title');
     delete_option('opensocial_announce_message');
     delete_option('opensocial_closed_message');
-
     return true;
 
   }
