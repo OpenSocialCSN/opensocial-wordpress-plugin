@@ -1,3 +1,7 @@
+<?php
+	if (!defined('ABSPATH')) exit; // Exit if accessed directly
+?>
+
 <h2><strong>Site Logo</strong></h2>
 <p style="margin-top: 5px; margin-bottom: 20px;">The site logo which will display on login page</p>
 <div class="site_logo">
