@@ -11,21 +11,21 @@ Integrate Wordpress site with OpenSocial Single Sign On
 
 == Description ==
 
-`OpenSocial Wordpress Plugin is a plugin allowing your users to easily authenticate into your Wordpress site. OpenSocial is a SSO one-click service allowing users to authenticate with their Google, Facebook, Twitter, LinkedIn, Github or OpenSocial accounts. The OpenSocial Wordpress Plugin is backed by the OpenSocial SSO service.`
+`OpenSocial is a plugin allowing your users to easily authenticate into your Wordpress site. OpenSocial is a SSO one-click service allowing users to authenticate with their Google, Facebook, Twitter, LinkedIn, Github or OpenSocial accounts. The OpenSocial Wordpress Plugin is backed by the OpenSocial SSO service.`
 
 == Installation ==
 
 = From your WordPress dashboard =
 
 1. Visit 'Plugins > Add New'
-2. Search for 'OpenSocial Wordpress Plugin'
+2. Search for 'OpenSocial'
 3. Click the Install Now link.
-3. Activate OpenSocial Wordpress Plugin from your Plugins page.
+3. Activate OpenSocial from your Plugins page.
 
 = From WordPress.org =
 
 1. Download OpenSocial Wordpress Plugin.
-2. Upload the 'opensocial-wordpress-plugin' directory to your '/wp-content/plug-ins/' directory, using your favorite method (ftp, sftp, scp, etc...)
+2. Upload the 'opensocial' directory to your '/wp-content/plug-ins/' directory, using your favorite method (ftp, sftp, scp, etc...)
 3. Activate OpenSocial Wordpress Plugin from your Plugins page.
 
 = After Activation - Go to 'Settings > OpenSocial SSO/Settings' and: =
