@@ -19,7 +19,7 @@ function op_member_count ()
 	return 'Join our '. $result['total_users']. ' members:';
 }
 
-function get_domain_name () {
+function op_get_domain_name () {
 	$identity = esc_url(get_site_url());
 	$urlparts = parse_url($identity);
 	return $urlparts[host];
@@ -263,7 +263,7 @@ function saml_acs() {
 			$user_id = wp_update_user($userdata);
 		}
 	} else if ($permission == 'Closed') {
-		header("Location: http://signup.opensocial.me/siteclosed?identity=".get_domain_name());
+		header("Location: http://signup.opensocial.me/siteclosed?identity=".op_get_domain_name());
 		//echo __("<br ><center>User registration is cloased by site administrator...<br ><br ><a href='/'>Go Back</a></center>");
 		exit();
 	}	else if (get_option('opensocial_saml_autocreate')) {

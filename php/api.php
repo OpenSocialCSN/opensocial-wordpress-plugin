@@ -7,25 +7,23 @@
     function postData ($url, $data)
     {
 
-      $curl_header = array('Content-Type: application/json');
-
-      $ch = curl_init();   
-      $options = array(
-        CURLOPT_URL => $this->api_url.$url,
-        CURLOPT_HTTPHEADER => $curl_header,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLINFO_HEADER_OUT => true,
-        CURLOPT_HEADER => false,
-        CURLOPT_REFERER => esc_url(get_site_url()),
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $data
+      $headers =  array( 
+        'Content-type' => 'application/json',
+        'Referer' => esc_url(get_site_url())
       );
-  
-      curl_setopt_array($ch, $options);
-      $result = curl_exec($ch);
-      curl_close($ch);
-  
+
+      $result = wp_remote_post($this->api_url.$url, array(
+        'method' => 'POST',
+        'timeout' => 45,
+        'redirection' => 5,
+        'httpversion' => '1.0',
+        'blocking' => true,
+        'headers' => $headers,
+        'body' => $data,
+        'cookies' => array()
+        )
+      );
+
       return json_decode($result, true);
 
     }
@@ -33,25 +31,22 @@
     function updateData ($url, $data)
     {
       
-      $curl_header = array('Content-Type: application/json');
-
-      $ch = curl_init();   
-      $options = array(
-        CURLOPT_URL => $this->api_url.$url,
-        CURLOPT_CUSTOMREQUEST => 'PATCH',
-        CURLOPT_HTTPHEADER => $curl_header,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLINFO_HEADER_OUT => true,
-        CURLOPT_HEADER => false,
-        CURLOPT_REFERER => esc_url(get_site_url()),
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $data
+      $headers =  array( 
+        'Content-type' => 'application/json',
+        'Referer' => esc_url(get_site_url())
       );
-  
-      curl_setopt_array($ch, $options);
-      $result = curl_exec($ch);
-      curl_close($ch);
+
+      $result = wp_remote_post($this->api_url.$url, array(
+        'method' => 'PATCH',
+        'timeout' => 45,
+        'redirection' => 5,
+        'httpversion' => '1.0',
+        'blocking' => true,
+        'headers' => $headers,
+        'body' => $data,
+        'cookies' => array()
+        )
+      );
   
       return json_decode($result, true);
 
@@ -60,25 +55,22 @@
     function delData ($url, $data)
     {
 
-      $curl_header = array('Content-Type: application/json');
-
-      $ch = curl_init();   
-      $options = array(
-        CURLOPT_URL => $this->api_url.$url,
-        CURLOPT_CUSTOMREQUEST => 'DELETE',
-        CURLOPT_HTTPHEADER => $curl_header,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLINFO_HEADER_OUT => true,
-        CURLOPT_HEADER => false,
-        CURLOPT_REFERER => esc_url(get_site_url()),
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $data
+      $headers =  array( 
+        'Content-type' => 'application/json',
+        'Referer' => esc_url(get_site_url())
       );
-  
-      curl_setopt_array($ch, $options);
-      $result = curl_exec($ch);
-      curl_close($ch);
+
+      $result = wp_remote_post($this->api_url.$url, array(
+        'method' => 'DELETE',
+        'timeout' => 45,
+        'redirection' => 5,
+        'httpversion' => '1.0',
+        'blocking' => true,
+        'headers' => $headers,
+        'body' => $data,
+        'cookies' => array()
+        )
+      );
   
       return json_decode($result, true);
 
