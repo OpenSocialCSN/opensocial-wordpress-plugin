@@ -16,13 +16,13 @@ $api = new opSAMLapiCall;
 /* Check if there is post for site logo or background upload request */
 if (array_key_exists('upload_site_logo', $_POST))
 {
-  if (empty($_POST['logo_url'])) {
+  if (empty(sanitize_text_field($_POST['logo_url']))) {
     pass;
   } else {
-    update_option('opensocial_saml_site_logo', $_POST['logo_url']);  
+    update_option('opensocial_saml_site_logo', sanitize_text_field($_POST['logo_url']));  
     $post_data = array(
       'identity'  => esc_url(get_site_url()),
-      'site_logo' => $_POST['logo_url']
+      'site_logo' => sanitize_text_field($_POST['logo_url'])
     );
     $data = json_encode($post_data);
     $msg = $api->updateData('subscriber', $data);
@@ -31,13 +31,13 @@ if (array_key_exists('upload_site_logo', $_POST))
 
 if (array_key_exists('upload_site_background', $_POST))
 {
-  if (empty($_POST['bg_url'])) {
+  if (empty(sanitize_text_field($_POST['bg_url']))) {
     pass;
   } else {
-    update_option('opensocial_saml_site_background', $_POST['bg_url']);
+    update_option('opensocial_saml_site_background', sanitize_text_field($_POST['bg_url']));
     $post_data = array(
       'identity'  => esc_url(get_site_url()),
-      'site_bg' => $_POST['bg_url']
+      'site_bg' => sanitize_text_field($_POST['bg_url'])
     );
     $data = json_encode($post_data);
     $msg = $api->updateData('subscriber', $data);
