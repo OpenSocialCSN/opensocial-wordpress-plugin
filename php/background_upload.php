@@ -1,3 +1,7 @@
+<?php
+	if (!defined('ABSPATH')) exit; // Exit if accessed directly
+?>
+
 <h2 style="margin-top: 30px;"><strong>Site Background</strong></h2>
 <p style="margin-top: 5px; margin-bottom: 20px;">The site logo which will display on login page</p>
 <div class="site_background">
@@ -11,7 +15,9 @@
   <input id="upload_bg_button" type="button" class="button" value="<?php _e( 'Select Background' ); ?>" />
   <input type='hidden' name='bg_url' id='bg_url' value=''>
   <input type="submit" name="upload_site_background" value="Save" class="button-primary">
-</form><?php
+</form>
+
+<?php
 
 add_action( 'admin_footer', 'op_background_upload_script' );
 
