@@ -15,9 +15,9 @@
   <input type="submit" name="upload_site_logo" value="Save" class="button-primary">
 </form><?php
 
-add_action( 'admin_footer', 'media_selector_print_scripts' );
+add_action( 'admin_footer', 'op_media_selector_print_scripts' );
 
-function media_selector_print_scripts() {
+function op_media_selector_print_scripts() {
 	$my_saved_attachment_post_id = get_option( 'media_selector_attachment_id', 0 );
 	?><script type='text/javascript'>
 		jQuery( document ).ready( function( $ ) {

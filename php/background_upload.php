@@ -13,9 +13,9 @@
   <input type="submit" name="upload_site_background" value="Save" class="button-primary">
 </form><?php
 
-add_action( 'admin_footer', 'background_upload_script' );
+add_action( 'admin_footer', 'op_background_upload_script' );
 
-function background_upload_script() {
+function op_background_upload_script() {
 	$my_saved_attachment_post_id = get_option( 'media_selector_attachment_id', 0 );
 	?><script type='text/javascript'>
 		jQuery( document ).ready( function( $ ) {
