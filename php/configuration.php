@@ -1,21 +1,27 @@
 <?php
 
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
+
 // Make sure we don't expose any info if called directly
 if ( !function_exists( 'add_action' ) ) {
 	echo 'Hi there!  something wrong there please check your wordpress.';
 	exit;
 }
 
-require_once "compatibility.php";
+require_once ( ABSPATH . WPINC . '/pluggable.php' );
+require_once (dirname(__FILE__) . "/compatibility.php");
 require_once (dirname(__FILE__) . "/lib/Saml2/Constants.php");
 require_once (dirname(__FILE__) . "/extlib/xmlseclibs/xmlseclibs.php");
+require_once (dirname(__FILE__) . "/api.php");
 
-require_once "api.php";
 $api = new opSAMLapiCall;
 
 /* Check if there is post for site logo or background upload request */
 if (array_key_exists('upload_site_logo', $_POST))
 {
+
+  check_admin_referer('op_upload_logo', 'op_submit_logo');
+
   if (empty(sanitize_text_field($_POST['logo_url']))) {
     pass;
   } else {
@@ -31,6 +37,9 @@ if (array_key_exists('upload_site_logo', $_POST))
 
 if (array_key_exists('upload_site_background', $_POST))
 {
+
+  check_admin_referer('op_upload_bg', 'op_submit_bg');
+  
   if (empty(sanitize_text_field($_POST['bg_url']))) {
     pass;
   } else {
@@ -154,9 +163,9 @@ function opensocial_saml_configuration_render() {
       </form>
 
         <?php
-          /* Include Site logo upload function */
-          require_once "site_logo_upload.php";
-          require_once "background_upload.php";
+          /* Include Site logo & background upload function */
+          require_once (dirname(__FILE__) . "/site_logo_upload.php");
+          require_once (dirname(__FILE__) . "/background_upload.php");
         ?>
       
     <div style="margin-top: 30px;"><strong>Note:</strong> 

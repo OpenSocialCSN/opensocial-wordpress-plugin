@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
+
 if (!function_exists('wp_roles'))
 {
     function wp_roles() {

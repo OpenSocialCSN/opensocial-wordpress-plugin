@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
+
 $libDir = dirname(__FILE__) . '/lib/Saml2/';
 $extlibDir = dirname(__FILE__) . '/extlib/';
 
