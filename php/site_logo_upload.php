@@ -1,6 +1,5 @@
 <?php
 	if (!defined('ABSPATH')) exit; // Exit if accessed directly
-	wp_enqueue_media();
 ?>
 
 <h2><strong>Site Logo</strong></h2>

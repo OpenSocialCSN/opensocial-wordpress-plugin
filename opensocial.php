@@ -13,7 +13,8 @@ function op_register_script() {
 }
 
 function op_enqueue_style(){
-  wp_enqueue_style( 'opensocial_login_style' );
+	wp_enqueue_style( 'opensocial_login_style' );
+	wp_enqueue_media();
 }
 
 // use the registered jquery and style above
