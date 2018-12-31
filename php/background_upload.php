@@ -12,6 +12,7 @@
   <div class='image-preview-wrapper'>
     <img id='bg-image-preview' src='<?php echo wp_get_attachment_url( get_option( 'media_selector_attachment_id' ) ); ?>' style='max-height: 100px;'>
   </div>
+	<?php wp_nonce_field('op_upload_bg', 'op_submit_bg' );?>
   <input id="upload_bg_button" type="button" class="button" value="<?php _e( 'Select Background' ); ?>" />
   <input type='hidden' name='bg_url' id='bg_url' value=''>
   <input type="submit" name="upload_site_background" value="Save" class="button-primary">

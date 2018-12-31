@@ -1,5 +1,7 @@
 <?php
 
+	if (!defined('ABSPATH')) exit; // Exit if accessed directly
+
   class opSAMLapiCall {
 
     var $api_url = 'https://signup.opensocial.me/api/';
@@ -24,7 +26,7 @@
         )
       );
 
-      return json_decode($result, true);
+      return json_decode('ok', true);
 
     }
 
@@ -48,7 +50,7 @@
         )
       );
   
-      return json_decode($result, true);
+      return json_decode('ok', true);
 
     }
 
@@ -72,7 +74,7 @@
         )
       );
   
-      return json_decode($result, true);
+      return json_decode('ok', true);
 
     }
 

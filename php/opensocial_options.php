@@ -1,5 +1,7 @@
 <?php
 
+	if (!defined('ABSPATH')) exit; // Exit if accessed directly
+
   // Make sure we don't expose any info if called directly
   if ( !function_exists( 'add_action' ) ) {
     echo 'Hi there!  something wrong there please check your wordpress.';

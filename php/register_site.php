@@ -1,13 +1,15 @@
 <?php
 
+  if (!defined('ABSPATH')) exit; // Exit if accessed directly
+
   // Make sure we don't expose any info if called directly
   if ( !function_exists( 'add_action' ) ) {
     echo 'Hi there! something wrong there please check your wordpress.';
     exit;
   }
 
-  require_once "functions.php";
-  require_once "api.php";
+  require_once (dirname(__FILE__) . "/functions.php");
+  require_once (dirname(__FILE__) . "/api.php");
 
   function op_register_site()
   {

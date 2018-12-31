@@ -1,5 +1,6 @@
 <?php
 	if (!defined('ABSPATH')) exit; // Exit if accessed directly
+	wp_enqueue_media();
 ?>
 
 <h2><strong>Site Logo</strong></h2>
@@ -8,12 +9,11 @@
   <img style="max-height: 100px;" src="<?php echo esc_attr(get_option('opensocial_saml_site_logo'));?>">
 </div>
 
-<?php wp_enqueue_media(); ?>
-
 <form method='post' action="">
   <div class='image-preview-wrapper'>
     <img id='image-preview' src='<?php echo wp_get_attachment_url( get_option( 'media_selector_attachment_id' ) ); ?>' style='max-height: 100px;'>
   </div>
+	<?php wp_nonce_field('op_upload_logo', 'op_submit_logo' );?>
   <input id="upload_image_button" type="button" class="button" value="<?php _e( 'Select Logo' ); ?>" />
   <input type='hidden' name='logo_url' id='logo_url' value=''>
   <input type="submit" name="upload_site_logo" value="Save" class="button-primary">
