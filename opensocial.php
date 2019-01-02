@@ -8,6 +8,10 @@ Version: 2.8.0
 Author URI: https://www.lablynx.com
 */
 
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 function op_register_script() {
   wp_register_style('opensocial_login_style', plugins_url('/css/opensocial_login_style.css', __FILE__), false, '1.0.8', 'all');
 }
