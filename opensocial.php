@@ -126,4 +126,4 @@ if (isset($_GET['saml_sso'])) {
 	}
 }
 
-?>
+/* EOF */
