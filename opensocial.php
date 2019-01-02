@@ -62,9 +62,9 @@ register_deactivation_hook( __FILE__, 'osl_op_del_options' );
 register_deactivation_hook( __FILE__, 'osl_op_unsub_site' );
 
 // Check if exists SAML Messages
-add_action('init', 'saml_checker', 1);
+add_action('init', 'osl_saml_checker', 1);
 
-if (!is_saml_enabled()) {
+if (!osl_is_saml_enabled()) {
 	return;
 }
 
@@ -82,13 +82,13 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'login';
 
 // Handle SLO
 if (isset($_COOKIE[OSL_SAML_LOGIN_COOKIE]) && get_option('opensocial_saml_slo')) {
-	add_action('init', 'saml_slo', 1);
+	add_action('init', 'osl_saml_slo', 1);
 }
 
 // Handle SSO
 if (isset($_GET['saml_sso'])) {
 
-  add_action('init', 'saml_sso', 1);
+  add_action('init', 'osl_saml_sso', 1);
 
 } else {
 
@@ -106,7 +106,7 @@ if (isset($_GET['saml_sso'])) {
 			$execute_sso = True;
 		} else if (!$saml_actions && !isset($_GET['loggedout'])) {
 			if (get_option('onelogin_saml_forcelogin')) {
-				add_action('init', 'saml_sso', 1);
+				add_action('init', 'osl_saml_sso', 1);
 			}
 		}
 	} else if ($local_wp_actions) {
@@ -120,9 +120,9 @@ if (isset($_GET['saml_sso'])) {
   $keep_local_login_form = get_option('opensocial_saml_keep_local_login', false);
   
 	if ($execute_sso && !$keep_local_login_form) {
-		add_action('init', 'saml_sso', 1);
+		add_action('init', 'osl_saml_sso', 1);
 	} else {
-		add_filter('login_message', 'saml_custom_login_footer');
+		add_filter('login_message', 'osl_saml_custom_login_footer');
 	}
 }
 

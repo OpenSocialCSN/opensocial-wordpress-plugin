@@ -27,24 +27,24 @@ function osl_op_get_domain_name () {
 	return $urlparts[host];
 }
 
-function saml_checker() {
+function osl_saml_checker() {
 	if (isset($_GET['saml_acs'])) {
 		if (empty($_POST['SAMLResponse'])) {
 			echo "That ACS endpoint expects a SAMLResponse value sent using HTTP-POST binding. Nothing was found";
 			exit();
 		}
-		saml_acs();
+		osl_saml_acs();
 	}
 	else if (isset($_GET['saml_sls'])) {
-		saml_sls();
+		osl_saml_sls();
 	} else if (isset($_GET['saml_metadata'])) {
-		saml_metadata();
+		osl_saml_metadata();
 	} else if (isset($_GET['saml_validate_config'])) {
-		saml_validate_config();
+		osl_saml_validate_config();
 	}
 }
 
-function is_saml_enabled() {
+function osl_is_saml_enabled() {
 	$saml_enabled = get_option('opensocial_saml_enabled', 'not defined');
 	if ($saml_enabled == 'not defined') {
 		if (get_option('opensocial_saml_idp_entityid', 'not defined') == 'not defined') {
@@ -58,11 +58,11 @@ function is_saml_enabled() {
 	return $saml_enabled;
 }
 
-function initialize_saml() {
+function osl_initialize_saml() {
 	require_once plugin_dir_path(__FILE__).'_toolkit_loader.php';
 	require plugin_dir_path(__FILE__).'settings.php';
 
-	if (!is_saml_enabled()) {
+	if (!osl_is_saml_enabled()) {
 		return false;
 	}
 
@@ -78,7 +78,7 @@ function initialize_saml() {
 	return $auth;
 }
 
-function saml_metadata() {
+function osl_saml_metadata() {
 	require_once plugin_dir_path(__FILE__).'_toolkit_loader.php';
 	require plugin_dir_path(__FILE__).'settings.php';
 
@@ -90,7 +90,7 @@ function saml_metadata() {
 	exit();
 }
 
-function saml_validate_config() {
+function osl_saml_validate_config() {
 	saml_load_translations();
 	require_once plugin_dir_path(__FILE__).'_toolkit_loader.php';
 	require plugin_dir_path(__FILE__).'settings.php';
@@ -98,7 +98,7 @@ function saml_validate_config() {
 	exit();
 }
 
-function saml_sso() {
+function osl_saml_sso() {
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		return true;
 	}
@@ -106,7 +106,7 @@ function saml_sso() {
 	if (is_user_logged_in()) {
 		return true;
 	}
-	$auth = initialize_saml();
+	$auth = osl_initialize_saml();
 	if ($auth == false) {
 		wp_redirect(home_url());
 		exit();
@@ -119,7 +119,7 @@ function saml_sso() {
 	exit();
 }
 
-function saml_slo() {
+function osl_saml_slo() {
 	$slo = get_option('opensocial_saml_slo');
 
 	if (isset($_GET['action']) && $_GET['action']  == 'logout') {
@@ -141,7 +141,7 @@ function saml_slo() {
 				$nameIdFormat = $_COOKIE[OSL_SAML_NAMEID_FORMAT_COOKIE];
 			}
 
-			$auth = initialize_saml();
+			$auth = osl_initialize_saml();
 			if ($auth == false) {
 				wp_redirect(home_url());
 				exit();
@@ -152,9 +152,9 @@ function saml_slo() {
 	}
 }
 
-function saml_acs() {
+function osl_saml_acs() {
 
-	$auth = initialize_saml();
+	$auth = osl_initialize_saml();
 	if ($auth == false) {
 		wp_redirect(home_url());
 		exit();
@@ -317,9 +317,9 @@ function saml_acs() {
 	exit();
 }
 
-function saml_sls() {
+function osl_saml_sls() {
 	
-	$auth = initialize_saml();
+	$auth = osl_initialize_saml();
 	if ($auth == false) {
 		wp_redirect(home_url());
 		exit();
@@ -362,7 +362,7 @@ function saml_sls() {
 	}
 }
 
-function saml_custom_login_footer() {
+function osl_saml_custom_login_footer() {
 	$saml_login_message = get_option('onelogin_saml_customize_links_saml_login');
 	if (empty($saml_login_message)) {
 		$saml_login_message = "OpenSocial SAML Login";
