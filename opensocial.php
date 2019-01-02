@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: OpenSocial
+Plugin Name: OpenSocial Login
 Plugin URI: https://github.com/OpenSocialCSN/opensocial-wordpress-plugin
 Description: OpenSocial Wordpress Plugin is a plugin allowing your users to easily authenticate into your Wordpress site. OpenSocial is a SSO one-click service allowing users to authenticate with their Google, Facebook, Twitter, LinkedIn, Github or OpenSocial accounts. The OpenSocial Wordpress Plugin is backed by the OpenSocial SSO service.
 Author: LabLynx, Inc.
