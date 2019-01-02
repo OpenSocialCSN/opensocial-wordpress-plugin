@@ -170,7 +170,7 @@ function opensocial_saml_configuration_render() {
       
     <div style="margin-top: 30px;"><strong>Note:</strong> 
       <p>You can use <strong>[opensocial_login_button]</strong> shortcode to display OpenSocial login button anywhere on your site.</p>
-      <p>You can use <strong>[op_member_count]</strong> shortcode to display total number of registered users.</p>
+      <p>You can use <strong>[opensocial_member_count]</strong> shortcode to display total number of registered users.</p>
     </div>
 
     </div>
