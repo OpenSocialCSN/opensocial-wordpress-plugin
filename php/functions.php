@@ -27,6 +27,14 @@ function osl_op_get_domain_name () {
 	return $urlparts[host];
 }
 
+function osl_saml_lostpassword() {
+	$target = get_option('onelogin_saml_customize_links_lost_password');
+	if (!empty($target)) {
+		wp_redirect($target);
+		exit;
+	}
+}
+
 function osl_saml_checker() {
 	if (isset($_GET['saml_acs'])) {
 		if (empty($_POST['SAMLResponse'])) {
