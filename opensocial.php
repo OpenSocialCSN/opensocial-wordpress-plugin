@@ -81,7 +81,7 @@ if ($prevent_reset_password) {
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'login';
 
 // Handle SLO
-if (isset($_COOKIE[SAML_LOGIN_COOKIE]) && get_option('opensocial_saml_slo')) {
+if (isset($_COOKIE[OSL_SAML_LOGIN_COOKIE]) && get_option('opensocial_saml_slo')) {
 	add_action('init', 'saml_slo', 1);
 }
 
