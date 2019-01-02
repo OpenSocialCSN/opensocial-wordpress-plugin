@@ -105,7 +105,7 @@ if (isset($_GET['saml_sso'])) {
 		if ($wp_login_page) {
 			$execute_sso = True;
 		} else if (!$saml_actions && !isset($_GET['loggedout'])) {
-			if (get_option('onelogin_saml_forcelogin')) {
+			if (get_option('opensocial_saml_forcelogin')) {
 				add_action('init', 'osl_saml_sso', 1);
 			}
 		}
