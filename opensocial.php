@@ -27,24 +27,18 @@ add_action('init', 'osl_op_register_script');
 add_action('admin_enqueue_scripts', 'osl_op_enqueue_style');
 add_action('wp_enqueue_scripts', 'osl_op_enqueue_style');
 
-// Make sure we don't expose any info if called directly
-if ( !function_exists( 'add_action' ) ) {
-	echo 'Hi there!  something wrong there please check your wordpress.';
-	exit;
-}
-
 // Allow cookie name overriding by defining following constants prior this point. Eg.: in wp-config.php.
-if ( false === defined( 'SAML_LOGIN_COOKIE' ) ) {
-	define( 'SAML_LOGIN_COOKIE', 'saml_login' );
+if ( false === defined( 'OSL_SAML_LOGIN_COOKIE' ) ) {
+	define( 'OSL_SAML_LOGIN_COOKIE', 'saml_login' );
 }
-if ( false === defined( 'SAML_NAMEID_COOKIE' ) ) {
-	define( 'SAML_NAMEID_COOKIE', 'saml_nameid' );
+if ( false === defined( 'OSL_SAML_NAMEID_COOKIE' ) ) {
+	define( 'OSL_SAML_NAMEID_COOKIE', 'saml_nameid' );
 }
-if ( false === defined( 'SAML_SESSIONINDEX_COOKIE' ) ) {
-	define( 'SAML_SESSIONINDEX_COOKIE', 'saml_sessionindex' );
+if ( false === defined( 'OSL_SAML_SESSIONINDEX_COOKIE' ) ) {
+	define( 'OSL_SAML_SESSIONINDEX_COOKIE', 'saml_sessionindex' );
 }
-if ( false === defined( 'SAML_NAMEID_FORMAT_COOKIE' ) ) {
-	define( 'SAML_NAMEID_FORMAT_COOKIE', 'saml_nameid_format' );
+if ( false === defined( 'OSL_SAML_NAMEID_FORMAT_COOKIE' ) ) {
+	define( 'OSL_SAML_NAMEID_FORMAT_COOKIE', 'saml_nameid_format' );
 }
 
 require_once plugin_dir_path(__FILE__)."php/functions.php";
@@ -87,7 +81,7 @@ if ($prevent_reset_password) {
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'login';
 
 // Handle SLO
-if (isset($_COOKIE[SAML_LOGIN_COOKIE]) && get_option('opensocial_saml_slo')) {
+if (isset($_COOKIE[OSL_SAML_LOGIN_COOKIE]) && get_option('opensocial_saml_slo')) {
 	add_action('init', 'saml_slo', 1);
 }
 
