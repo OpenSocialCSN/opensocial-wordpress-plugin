@@ -73,9 +73,9 @@ if ($prevent_reset_password) {
 	add_filter ('allow_password_reset', 'osl_disable_password_reset' );
 	function osl_disable_password_reset() { return false; }
 } else {
-	add_action('lost_password', 'saml_lostpassword', 1);
-	add_action('retrieve_password', 'saml_lostpassword' , 1);
-	add_action('password_reset', 'saml_lostpassword', 1);
+	add_action('lost_password', 'osl_saml_lostpassword', 1);
+	add_action('retrieve_password', 'osl_saml_lostpassword' , 1);
+	add_action('password_reset', 'osl_saml_lostpassword', 1);
 }
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'login';
