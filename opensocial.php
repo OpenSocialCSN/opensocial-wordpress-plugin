@@ -47,7 +47,7 @@ require_once plugin_dir_path(__FILE__)."php/opensocial_options.php";
 require_once plugin_dir_path(__FILE__)."php/register_site.php";
 
 // add shortcode
-add_shortcode('opensocial_login_button', 'opensocial_show_op_button');
+add_shortcode('opensocial_login_button', 'osl_show_op_button');
 add_shortcode('opensocial_member_count', 'osl_op_member_count');
 
 // add menu option for configuration
