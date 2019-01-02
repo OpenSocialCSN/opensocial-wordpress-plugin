@@ -70,8 +70,8 @@ if (!osl_is_saml_enabled()) {
 
 $prevent_reset_password = get_option('opensocial_saml_customize_action_prevent_reset_password', false);
 if ($prevent_reset_password) {
-	add_filter ('allow_password_reset', 'disable_password_reset' );
-	function disable_password_reset() { return false; }
+	add_filter ('allow_password_reset', 'osl_disable_password_reset' );
+	function osl_disable_password_reset() { return false; }
 } else {
 	add_action('lost_password', 'saml_lostpassword', 1);
 	add_action('retrieve_password', 'saml_lostpassword' , 1);
