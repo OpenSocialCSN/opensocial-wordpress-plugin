@@ -11,7 +11,7 @@
   require_once (dirname(__FILE__) . "/functions.php");
   require_once (dirname(__FILE__) . "/api.php");
 
-  function op_register_site()
+  function osl_op_register_site()
   {
     $api = new opSAMLapiCall;
 
@@ -21,7 +21,7 @@
 
     $post_data = array(
       'identity' => $identity,
-      'domain' => op_get_domain_name(),
+      'domain' => osl_op_get_domain_name(),
       'acs' => $acs,
       'sls' => $sls
     );
@@ -32,7 +32,7 @@
     return true;
   }
 
-  function op_unsub_site()
+  function osl_op_unsub_site()
   {
 
     $api = new opSAMLapiCall;

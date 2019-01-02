@@ -12,20 +12,20 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-function op_register_script() {
+function osl_op_register_script() {
   wp_register_style('opensocial_login_style', plugins_url('/css/opensocial_login_style.css', __FILE__), false, '1.0.8', 'all');
 }
 
-function op_enqueue_style(){
+function osl_op_enqueue_style(){
 	wp_enqueue_style( 'opensocial_login_style' );
 	wp_enqueue_media();
 }
 
 // use the registered jquery and style above
 add_filter('https_ssl_verify', '__return_false');
-add_action('init', 'op_register_script');
-add_action('admin_enqueue_scripts', 'op_enqueue_style');
-add_action('wp_enqueue_scripts', 'op_enqueue_style');
+add_action('init', 'osl_op_register_script');
+add_action('admin_enqueue_scripts', 'osl_op_enqueue_style');
+add_action('wp_enqueue_scripts', 'osl_op_enqueue_style');
 
 // Make sure we don't expose any info if called directly
 if ( !function_exists( 'add_action' ) ) {
@@ -54,18 +54,18 @@ require_once plugin_dir_path(__FILE__)."php/register_site.php";
 
 // add shortcode
 add_shortcode('opensocial_login_button', 'show_op_button');
-add_shortcode('op_member_count', 'op_member_count');
+add_shortcode('op_member_count', 'osl_op_member_count');
 
 // add menu option for configuration
 add_action('admin_menu', 'opensocial_saml_configuration');
 
 // On plugin activate load default options and subscribe site on OpenSocial SSO network
-register_activation_hook( __FILE__, 'op_set_options' );
-register_activation_hook( __FILE__, 'op_register_site' );
+register_activation_hook( __FILE__, 'osl_op_set_options' );
+register_activation_hook( __FILE__, 'osl_op_register_site' );
 
 // On plugin deactivate remove default option and unsubscribe site on OpenSocial SSO network
-register_deactivation_hook( __FILE__, 'op_del_options' );
-register_deactivation_hook( __FILE__, 'op_unsub_site' );
+register_deactivation_hook( __FILE__, 'osl_op_del_options' );
+register_deactivation_hook( __FILE__, 'osl_op_unsub_site' );
 
 // Check if exists SAML Messages
 add_action('init', 'saml_checker', 1);

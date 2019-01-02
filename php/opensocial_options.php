@@ -11,7 +11,7 @@
   // $urlparts = parse_url(site_url());
   // $domain = $urlparts[host];
 
-  function op_set_options() 
+  function osl_op_set_options() 
   {
    
     update_option('opensocial_saml_enabled', '');
@@ -72,7 +72,7 @@ jQ==
   }
 
 
-  function op_del_options() 
+  function osl_op_del_options() 
   {
 
     delete_option('opensocial_saml_enabled');
