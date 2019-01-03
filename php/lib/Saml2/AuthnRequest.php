@@ -4,12 +4,12 @@
  * SAML 2 Authentication Request
  *
  */
-class OneLogin_Saml2_AuthnRequest
+class OpenSocial_Saml2_AuthnRequest
 {
 
     /**
      * Object that represents the setting info
-     * @var OneLogin_Saml2_Settings
+     * @var OpenSocial_Saml2_Settings
      */
     protected $_settings;
 
@@ -28,12 +28,12 @@ class OneLogin_Saml2_AuthnRequest
     /**
      * Constructs the AuthnRequest object.
      *
-     * @param OneLogin_Saml2_Settings $settings Settings
+     * @param OpenSocial_Saml2_Settings $settings Settings
      * @param bool   $forceAuthn      When true the AuthNReuqest will set the ForceAuthn='true'
      * @param bool   $isPassive       When true the AuthNReuqest will set the Ispassive='true'
      * @param bool   $setNameIdPolicy When true the AuthNReuqest will set a nameIdPolicy
      */
-    public function __construct(OneLogin_Saml2_Settings $settings, $forceAuthn = false, $isPassive = false, $setNameIdPolicy = true)
+    public function __construct(OpenSocial_Saml2_Settings $settings, $forceAuthn = false, $isPassive = false, $setNameIdPolicy = true)
     {
         $this->_settings = $settings;
 
@@ -41,14 +41,14 @@ class OneLogin_Saml2_AuthnRequest
         $idpData = $this->_settings->getIdPData();
         $security = $this->_settings->getSecurityData();
 
-        $id = OneLogin_Saml2_Utils::generateUniqueID();
-        $issueInstant = OneLogin_Saml2_Utils::parseTime2SAML(time());
+        $id = OpenSocial_Saml2_Utils::generateUniqueID();
+        $issueInstant = OpenSocial_Saml2_Utils::parseTime2SAML(time());
 
         $nameIdPolicyStr = '';
         if ($setNameIdPolicy) {
             $nameIDPolicyFormat = $spData['NameIDFormat'];
             if (isset($security['wantNameIdEncrypted']) && $security['wantNameIdEncrypted']) {
-                $nameIDPolicyFormat = OneLogin_Saml2_Constants::NAMEID_ENCRYPTED;
+                $nameIDPolicyFormat = OpenSocial_Saml2_Constants::NAMEID_ENCRYPTED;
             }
 
             $nameIdPolicyStr = <<<NAMEIDPOLICY

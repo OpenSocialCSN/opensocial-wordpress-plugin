@@ -5,7 +5,7 @@
  *
  * Defines the Error class
  */
-class OneLogin_Saml2_Error extends Exception
+class OpenSocial_Saml2_Error extends Exception
 {
     // Errors
     const SETTINGS_FILE_NOT_FOUND = 0;
@@ -38,7 +38,7 @@ class OneLogin_Saml2_Error extends Exception
         assert('is_string($msg)');
         assert('is_int($code)');
 
-        $message = OneLogin_Saml2_Utils::t($msg, $args);
+        $message = OpenSocial_Saml2_Utils::t($msg, $args);
 
         parent::__construct($message, $code);
     }
@@ -48,7 +48,7 @@ class OneLogin_Saml2_Error extends Exception
  * This class implements another custom Exception handler,
  * related to exceptions that happens during validation process.
  */
-class OneLogin_Saml2_ValidationError extends Exception
+class OpenSocial_Saml2_ValidationError extends Exception
 {
     # Validation Errors
     const UNSUPPORTED_SAML_VERSION = 0;
@@ -114,7 +114,7 @@ class OneLogin_Saml2_ValidationError extends Exception
         assert('is_string($msg)');
         assert('is_int($code)');
 
-        $message = OneLogin_Saml2_Utils::t($msg, $args);
+        $message = OpenSocial_Saml2_Utils::t($msg, $args);
 
         parent::__construct($message, $code);
     }

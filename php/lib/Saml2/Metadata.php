@@ -5,7 +5,7 @@
  *
  */
 
-class OneLogin_Saml2_Metadata
+class OpenSocial_Saml2_Metadata
 {
     const TIME_VALID = 172800;  // 2 days
     const TIME_CACHED = 604800; // 1 week
@@ -186,7 +186,7 @@ METADATA_TEMPLATE;
      */
     public static function signMetadata($metadata, $key, $cert, $signAlgorithm = XMLSecurityKey::RSA_SHA1, $digestAlgorithm = XMLSecurityDSig::SHA1)
     {
-        return OneLogin_Saml2_Utils::addSign($metadata, $key, $cert, $signAlgorithm, $digestAlgorithm);
+        return OpenSocial_Saml2_Utils::addSign($metadata, $key, $cert, $signAlgorithm, $digestAlgorithm);
     }
 
     /**
@@ -207,7 +207,7 @@ METADATA_TEMPLATE;
         $xml->preserveWhiteSpace = false;
         $xml->formatOutput = true;
         try {
-            $xml = OneLogin_Saml2_Utils::loadXML($xml, $metadata);
+            $xml = OpenSocial_Saml2_Utils::loadXML($xml, $metadata);
             if (!$xml) {
                 throw new Exception('Error parsing metadata');
             }
@@ -215,16 +215,16 @@ METADATA_TEMPLATE;
             throw new Exception('Error parsing metadata. '.$e->getMessage());
         }
 
-        $formatedCert = OneLogin_Saml2_Utils::formatCert($cert, false);
-        $x509Certificate = $xml->createElementNS(OneLogin_Saml2_Constants::NS_DS, 'X509Certificate', $formatedCert);
+        $formatedCert = OpenSocial_Saml2_Utils::formatCert($cert, false);
+        $x509Certificate = $xml->createElementNS(OpenSocial_Saml2_Constants::NS_DS, 'X509Certificate', $formatedCert);
 
-        $keyData = $xml->createElementNS(OneLogin_Saml2_Constants::NS_DS, 'ds:X509Data');
+        $keyData = $xml->createElementNS(OpenSocial_Saml2_Constants::NS_DS, 'ds:X509Data');
         $keyData->appendChild($x509Certificate);
 
-        $keyInfo = $xml->createElementNS(OneLogin_Saml2_Constants::NS_DS, 'ds:KeyInfo');
+        $keyInfo = $xml->createElementNS(OpenSocial_Saml2_Constants::NS_DS, 'ds:KeyInfo');
         $keyInfo->appendChild($keyData);
 
-        $keyDescriptor = $xml->createElementNS(OneLogin_Saml2_Constants::NS_MD, "md:KeyDescriptor");
+        $keyDescriptor = $xml->createElementNS(OpenSocial_Saml2_Constants::NS_MD, "md:KeyDescriptor");
 
         $SPSSODescriptor = $xml->getElementsByTagName('SPSSODescriptor')->item(0);
         $SPSSODescriptor->insertBefore($keyDescriptor->cloneNode(), $SPSSODescriptor->firstChild);

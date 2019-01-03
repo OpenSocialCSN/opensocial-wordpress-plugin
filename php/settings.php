@@ -11,23 +11,23 @@ if ( !function_exists( 'add_action' ) ) {
 require_once (dirname(__FILE__) . "/lib/Saml2/Constants.php");
 
 $posible_nameidformat_values = array(
-    'unspecified' => OneLogin_Saml2_Constants::NAMEID_UNSPECIFIED,
-    'emailAddress' => OneLogin_Saml2_Constants::NAMEID_EMAIL_ADDRESS,
-    'transient' => OneLogin_Saml2_Constants::NAMEID_TRANSIENT,
-    'persistent' => OneLogin_Saml2_Constants::NAMEID_PERSISTENT,
-    'entity' => OneLogin_Saml2_Constants::NAMEID_ENTITY,
-    'encrypted' => OneLogin_Saml2_Constants::NAMEID_ENCRYPTED,
-    'kerberos' => OneLogin_Saml2_Constants::NAMEID_KERBEROS,
-    'x509subjecname' => OneLogin_Saml2_Constants::NAMEID_X509_SUBJECT_NAME,
-    'windowsdomainqualifiedname' => OneLogin_Saml2_Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME
+    'unspecified' => OpenSocial_Saml2_Constants::NAMEID_UNSPECIFIED,
+    'emailAddress' => OpenSocial_Saml2_Constants::NAMEID_EMAIL_ADDRESS,
+    'transient' => OpenSocial_Saml2_Constants::NAMEID_TRANSIENT,
+    'persistent' => OpenSocial_Saml2_Constants::NAMEID_PERSISTENT,
+    'entity' => OpenSocial_Saml2_Constants::NAMEID_ENTITY,
+    'encrypted' => OpenSocial_Saml2_Constants::NAMEID_ENCRYPTED,
+    'kerberos' => OpenSocial_Saml2_Constants::NAMEID_KERBEROS,
+    'x509subjecname' => OpenSocial_Saml2_Constants::NAMEID_X509_SUBJECT_NAME,
+    'windowsdomainqualifiedname' => OpenSocial_Saml2_Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME
 );
 $posible_requestedauthncontext_values = array(
-    'unspecified' => OneLogin_Saml2_Constants::AC_UNSPECIFIED,
-    'password' => OneLogin_Saml2_Constants::AC_PASSWORD,
+    'unspecified' => OpenSocial_Saml2_Constants::AC_UNSPECIFIED,
+    'password' => OpenSocial_Saml2_Constants::AC_PASSWORD,
     'passwordprotectedtransport' => "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport",
-    'x509' => OneLogin_Saml2_Constants::AC_X509,
-    'smartcard' => OneLogin_Saml2_Constants::AC_SMARTCARD,
-    'kerberos' => OneLogin_Saml2_Constants::AC_KERBEROS,
+    'x509' => OpenSocial_Saml2_Constants::AC_X509,
+    'smartcard' => OpenSocial_Saml2_Constants::AC_SMARTCARD,
+    'kerberos' => OpenSocial_Saml2_Constants::AC_KERBEROS,
 );
 
 

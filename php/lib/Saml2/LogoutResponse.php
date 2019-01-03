@@ -4,7 +4,7 @@
  * SAML 2 Logout Response
  *
  */
-class OneLogin_Saml2_LogoutResponse
+class OpenSocial_Saml2_LogoutResponse
 {
     /**
     * Contains the ID of the Logout Response
@@ -14,7 +14,7 @@ class OneLogin_Saml2_LogoutResponse
 
     /**
      * Object that represents the setting info
-     * @var OneLogin_Saml2_Settings
+     * @var OpenSocial_Saml2_Settings
      */
     protected $_settings;
 
@@ -40,18 +40,18 @@ class OneLogin_Saml2_LogoutResponse
      * Constructs a Logout Response object (Initialize params from settings and if provided
      * load the Logout Response.
      *
-     * @param OneLogin_Saml2_Settings $settings Settings.
+     * @param OpenSocial_Saml2_Settings $settings Settings.
      * @param string|null             $response An UUEncoded SAML Logout response from the IdP.
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
-    public function __construct(OneLogin_Saml2_Settings $settings, $response = null)
+    public function __construct(OpenSocial_Saml2_Settings $settings, $response = null)
     {
         $this->_settings = $settings;
 
         $baseURL = $this->_settings->getBaseURL();
         if (!empty($baseURL)) {
-            OneLogin_Saml2_Utils::setBaseURL($baseURL);
+            OpenSocial_Saml2_Utils::setBaseURL($baseURL);
         }
 
         if ($response) {
@@ -63,12 +63,12 @@ class OneLogin_Saml2_LogoutResponse
                 $this->_logoutResponse = $decoded;
             }
             $this->document = new DOMDocument();
-            $this->document = OneLogin_Saml2_Utils::loadXML($this->document, $this->_logoutResponse);
+            $this->document = OpenSocial_Saml2_Utils::loadXML($this->document, $this->_logoutResponse);
 
             if (false === $this->document) {
-                throw new OneLogin_Saml2_Error(
+                throw new OpenSocial_Saml2_Error(
                     "LogoutResponse could not be processed",
-                    OneLogin_Saml2_Error::SAML_LOGOUTRESPONSE_INVALID
+                    OpenSocial_Saml2_Error::SAML_LOGOUTRESPONSE_INVALID
                 );
             }
 
@@ -127,11 +127,11 @@ class OneLogin_Saml2_LogoutResponse
                 $security = $this->_settings->getSecurityData();
 
                 if ($security['wantXMLValidation']) {
-                    $res = OneLogin_Saml2_Utils::validateXML($this->document, 'saml-schema-protocol-2.0.xsd', $this->_settings->isDebugActive());
+                    $res = OpenSocial_Saml2_Utils::validateXML($this->document, 'saml-schema-protocol-2.0.xsd', $this->_settings->isDebugActive());
                     if (!$res instanceof DOMDocument) {
-                        throw new OneLogin_Saml2_ValidationError(
+                        throw new OpenSocial_Saml2_ValidationError(
                             "Invalid SAML Logout Response. Not match the saml-schema-protocol-2.0.xsd",
-                            OneLogin_Saml2_ValidationError::INVALID_XML_FORMAT
+                            OpenSocial_Saml2_ValidationError::INVALID_XML_FORMAT
                         );
                     }
                 }
@@ -140,9 +140,9 @@ class OneLogin_Saml2_LogoutResponse
                 if (isset($requestId) && $this->document->documentElement->hasAttribute('InResponseTo')) {
                     $inResponseTo = $this->document->documentElement->getAttribute('InResponseTo');
                     if ($requestId != $inResponseTo) {
-                        throw new OneLogin_Saml2_ValidationError(
+                        throw new OpenSocial_Saml2_ValidationError(
                             "The InResponseTo of the Logout Response: $inResponseTo, does not match the ID of the Logout request sent by the SP: $requestId",
-                            OneLogin_Saml2_ValidationError::WRONG_INRESPONSETO
+                            OpenSocial_Saml2_ValidationError::WRONG_INRESPONSETO
                         );
                     }
                 }
@@ -150,39 +150,39 @@ class OneLogin_Saml2_LogoutResponse
                 // Check issuer
                 $issuer = $this->getIssuer();
                 if (!empty($issuer) && $issuer != $idPEntityId) {
-                    throw new OneLogin_Saml2_ValidationError(
+                    throw new OpenSocial_Saml2_ValidationError(
                         "Invalid issuer in the Logout Response",
-                        OneLogin_Saml2_ValidationError::WRONG_ISSUER
+                        OpenSocial_Saml2_ValidationError::WRONG_ISSUER
                     );
                 }
 
-                $currentURL = OneLogin_Saml2_Utils::getSelfRoutedURLNoQuery();
+                $currentURL = OpenSocial_Saml2_Utils::getSelfRoutedURLNoQuery();
 
                 // Check destination
                 if ($this->document->documentElement->hasAttribute('Destination')) {
                     $destination = $this->document->documentElement->getAttribute('Destination');
                     if (!empty($destination) && strpos($destination, $currentURL) === false) {
-                        throw new OneLogin_Saml2_ValidationError(
+                        throw new OpenSocial_Saml2_ValidationError(
                             "The LogoutResponse was received at $currentURL instead of $destination",
-                            OneLogin_Saml2_ValidationError::WRONG_DESTINATION
+                            OpenSocial_Saml2_ValidationError::WRONG_DESTINATION
                         );
                     }
                 }
 
                 if ($security['wantMessagesSigned'] && !isset($_GET['Signature'])) {
-                    throw new OneLogin_Saml2_ValidationError(
+                    throw new OpenSocial_Saml2_ValidationError(
                         "The Message of the Logout Response is not signed and the SP requires it",
-                        OneLogin_Saml2_ValidationError::NO_SIGNED_MESSAGE
+                        OpenSocial_Saml2_ValidationError::NO_SIGNED_MESSAGE
                     );
                 }
             }
 
             if (isset($_GET['Signature'])) {
-                $signatureValid = OneLogin_Saml2_Utils::validateBinarySign("SAMLResponse", $_GET, $idpData, $retrieveParametersFromServer);
+                $signatureValid = OpenSocial_Saml2_Utils::validateBinarySign("SAMLResponse", $_GET, $idpData, $retrieveParametersFromServer);
                 if (!$signatureValid) {
-                    throw new OneLogin_Saml2_ValidationError(
+                    throw new OpenSocial_Saml2_ValidationError(
                         "Signature validation failed. Logout Response rejected",
-                        OneLogin_Saml2_ValidationError::INVALID_SIGNATURE
+                        OpenSocial_Saml2_ValidationError::INVALID_SIGNATURE
                     );
                 }
             }
@@ -206,7 +206,7 @@ class OneLogin_Saml2_LogoutResponse
      */
     private function _query($query)
     {
-        return OneLogin_Saml2_Utils::query($this->document, $query);
+        return OpenSocial_Saml2_Utils::query($this->document, $query);
 
     }
 
@@ -221,8 +221,8 @@ class OneLogin_Saml2_LogoutResponse
         $spData = $this->_settings->getSPData();
         $idpData = $this->_settings->getIdPData();
 
-        $this->id = OneLogin_Saml2_Utils::generateUniqueID();
-        $issueInstant = OneLogin_Saml2_Utils::parseTime2SAML(time());
+        $this->id = OpenSocial_Saml2_Utils::generateUniqueID();
+        $issueInstant = OpenSocial_Saml2_Utils::parseTime2SAML(time());
 
         $spEntityId = htmlspecialchars($spData['entityId'], ENT_QUOTES);
         $logoutResponse = <<<LOGOUTRESPONSE

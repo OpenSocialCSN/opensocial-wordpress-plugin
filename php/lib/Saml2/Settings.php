@@ -5,7 +5,7 @@
  *
  */
 
-class OneLogin_Saml2_Settings
+class OpenSocial_Saml2_Settings
 {
     /**
      * List of paths.
@@ -100,8 +100,8 @@ class OneLogin_Saml2_Settings
      * @param array|object|null $settings SAML Toolkit Settings
      * @param bool $spValidationOnly
      *
-     * @throws OneLogin_Saml2_Error If any settings parameter is invalid
-     * @throws Exception If OneLogin_Saml2_Settings is incorrectly supplied
+     * @throws OpenSocial_Saml2_Error If any settings parameter is invalid
+     * @throws Exception If OpenSocial_Saml2_Settings is incorrectly supplied
      */
     public function __construct($settings = null, $spValidationOnly = false)
     {
@@ -110,32 +110,32 @@ class OneLogin_Saml2_Settings
 
         if (!isset($settings)) {
             if (!$this->_loadSettingsFromFile()) {
-                throw new OneLogin_Saml2_Error(
+                throw new OpenSocial_Saml2_Error(
                     'Invalid file settings: %s',
-                    OneLogin_Saml2_Error::SETTINGS_INVALID,
+                    OpenSocial_Saml2_Error::SETTINGS_INVALID,
                     array(implode(', ', $this->_errors))
                 );
             }
             $this->_addDefaultValues();
         } else if (is_array($settings)) {
             if (!$this->_loadSettingsFromArray($settings)) {
-                throw new OneLogin_Saml2_Error(
+                throw new OpenSocial_Saml2_Error(
                     'Invalid array settings: %s',
-                    OneLogin_Saml2_Error::SETTINGS_INVALID,
+                    OpenSocial_Saml2_Error::SETTINGS_INVALID,
                     array(implode(', ', $this->_errors))
                 );
             }
-        } else if ($settings instanceof OneLogin_Saml2_Settings) {
-            throw new OneLogin_Saml2_Error(
+        } else if ($settings instanceof OpenSocial_Saml2_Settings) {
+            throw new OpenSocial_Saml2_Error(
                 'Only instances of OneLogin_Saml_Settings are supported.',
-                OneLogin_Saml2_Error::UNSUPPORTED_SETTINGS_OBJECT,
+                OpenSocial_Saml2_Error::UNSUPPORTED_SETTINGS_OBJECT,
                 array(implode(', ', $this->_errors))
             );
         } else {
             if (!$this->_loadSettingsFromArray($settings->getValues())) {
-                throw new OneLogin_Saml2_Error(
+                throw new OpenSocial_Saml2_Error(
                     'Invalid array settings: %s',
-                    OneLogin_Saml2_Error::SETTINGS_INVALID,
+                    OpenSocial_Saml2_Error::SETTINGS_INVALID,
                     array(implode(', ', $this->_errors))
                 );
             }
@@ -289,7 +289,7 @@ class OneLogin_Saml2_Settings
      *
      * @return bool True if the settings info is valid
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      *
      * @suppress PhanUndeclaredVariable
      */
@@ -298,9 +298,9 @@ class OneLogin_Saml2_Settings
         $filename = $this->getConfigPath().'settings.php';
 
         if (!file_exists($filename)) {
-            throw new OneLogin_Saml2_Error(
+            throw new OpenSocial_Saml2_Error(
                 'Settings file not found: %s',
-                OneLogin_Saml2_Error::SETTINGS_FILE_NOT_FOUND,
+                OpenSocial_Saml2_Error::SETTINGS_FILE_NOT_FOUND,
                 array($filename)
             );
         }
@@ -328,10 +328,10 @@ class OneLogin_Saml2_Settings
     private function _addDefaultValues()
     {
         if (!isset($this->_sp['assertionConsumerService']['binding'])) {
-            $this->_sp['assertionConsumerService']['binding'] = OneLogin_Saml2_Constants::BINDING_HTTP_POST;
+            $this->_sp['assertionConsumerService']['binding'] = OpenSocial_Saml2_Constants::BINDING_HTTP_POST;
         }
         if (isset($this->_sp['singleLogoutService']) && !isset($this->_sp['singleLogoutService']['binding'])) {
-            $this->_sp['singleLogoutService']['binding'] = OneLogin_Saml2_Constants::BINDING_HTTP_REDIRECT;
+            $this->_sp['singleLogoutService']['binding'] = OpenSocial_Saml2_Constants::BINDING_HTTP_REDIRECT;
         }
 
         if (!isset($this->_compress['requests'])) {
@@ -344,7 +344,7 @@ class OneLogin_Saml2_Settings
 
         // Related to nameID
         if (!isset($this->_sp['NameIDFormat'])) {
-            $this->_sp['NameIDFormat'] = OneLogin_Saml2_Constants::NAMEID_UNSPECIFIED;
+            $this->_sp['NameIDFormat'] = OpenSocial_Saml2_Constants::NAMEID_UNSPECIFIED;
         }
         if (!isset($this->_security['nameIdEncrypted'])) {
             $this->_security['nameIdEncrypted'] = false;
@@ -809,15 +809,15 @@ class OneLogin_Saml2_Settings
      * @return string  SP metadata (xml)
      *
      * @throws Exception
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public function getSPMetadata($alwaysPublishEncryptionCert = false, $validUntil = null, $cacheDuration = null)
     {
-        $metadata = OneLogin_Saml2_Metadata::builder($this->_sp, $this->_security['authnRequestsSigned'], $this->_security['wantAssertionsSigned'], $validUntil, $cacheDuration, $this->getContacts(), $this->getOrganization());
+        $metadata = OpenSocial_Saml2_Metadata::builder($this->_sp, $this->_security['authnRequestsSigned'], $this->_security['wantAssertionsSigned'], $validUntil, $cacheDuration, $this->getContacts(), $this->getOrganization());
 
         $certNew = $this->getSPcertNew();
         if (!empty($certNew)) {
-            $metadata = OneLogin_Saml2_Metadata::addX509KeyDescriptors(
+            $metadata = OpenSocial_Saml2_Metadata::addX509KeyDescriptors(
                 $metadata,
                 $certNew,
                 $alwaysPublishEncryptionCert || $this->_security['wantNameIdEncrypted'] || $this->_security['wantAssertionsEncrypted']
@@ -826,7 +826,7 @@ class OneLogin_Saml2_Settings
 
         $cert = $this->getSPcert();
         if (!empty($cert)) {
-            $metadata = OneLogin_Saml2_Metadata::addX509KeyDescriptors(
+            $metadata = OpenSocial_Saml2_Metadata::addX509KeyDescriptors(
                 $metadata,
                 $cert,
                 $alwaysPublishEncryptionCert || $this->_security['wantNameIdEncrypted'] || $this->_security['wantAssertionsEncrypted']
@@ -840,25 +840,25 @@ class OneLogin_Saml2_Settings
                 $certMetadata = $cert;
 
                 if (!$keyMetadata) {
-                    throw new OneLogin_Saml2_Error(
+                    throw new OpenSocial_Saml2_Error(
                         'SP Private key not found.',
-                        OneLogin_Saml2_Error::PRIVATE_KEY_FILE_NOT_FOUND
+                        OpenSocial_Saml2_Error::PRIVATE_KEY_FILE_NOT_FOUND
                     );
                 }
 
                 if (!$certMetadata) {
-                    throw new OneLogin_Saml2_Error(
+                    throw new OpenSocial_Saml2_Error(
                         'SP Public cert not found.',
-                        OneLogin_Saml2_Error::PUBLIC_CERT_FILE_NOT_FOUND
+                        OpenSocial_Saml2_Error::PUBLIC_CERT_FILE_NOT_FOUND
                     );
                 }
             } else {
                 if (!isset($this->_security['signMetadata']['keyFileName'])
                     || !isset($this->_security['signMetadata']['certFileName'])
                 ) {
-                    throw new OneLogin_Saml2_Error(
+                    throw new OpenSocial_Saml2_Error(
                         'Invalid Setting: signMetadata value of the sp is not valid',
-                        OneLogin_Saml2_Error::SETTINGS_INVALID_SYNTAX
+                        OpenSocial_Saml2_Error::SETTINGS_INVALID_SYNTAX
                     );
                 }
                 $keyFileName = $this->_security['signMetadata']['keyFileName'];
@@ -869,17 +869,17 @@ class OneLogin_Saml2_Settings
 
 
                 if (!file_exists($keyMetadataFile)) {
-                    throw new OneLogin_Saml2_Error(
+                    throw new OpenSocial_Saml2_Error(
                         'SP Private key file not found: %s',
-                        OneLogin_Saml2_Error::PRIVATE_KEY_FILE_NOT_FOUND,
+                        OpenSocial_Saml2_Error::PRIVATE_KEY_FILE_NOT_FOUND,
                         array($keyMetadataFile)
                     );
                 }
 
                 if (!file_exists($certMetadataFile)) {
-                    throw new OneLogin_Saml2_Error(
+                    throw new OpenSocial_Saml2_Error(
                         'SP Public cert file not found: %s',
-                        OneLogin_Saml2_Error::PUBLIC_CERT_FILE_NOT_FOUND,
+                        OpenSocial_Saml2_Error::PUBLIC_CERT_FILE_NOT_FOUND,
                         array($certMetadataFile)
                     );
                 }
@@ -889,7 +889,7 @@ class OneLogin_Saml2_Settings
 
             $signatureAlgorithm = $this->_security['signatureAlgorithm'];
             $digestAlgorithm = $this->_security['digestAlgorithm'];
-            $metadata = OneLogin_Saml2_Metadata::signMetadata($metadata, $keyMetadata, $certMetadata, $signatureAlgorithm, $digestAlgorithm);
+            $metadata = OpenSocial_Saml2_Metadata::signMetadata($metadata, $keyMetadata, $certMetadata, $signatureAlgorithm, $digestAlgorithm);
         }
         return $metadata;
     }
@@ -908,7 +908,7 @@ class OneLogin_Saml2_Settings
         assert('is_string($xml)');
 
         $errors = array();
-        $res = OneLogin_Saml2_Utils::validateXML($xml, 'saml-schema-metadata-2.0.xsd', $this->_debug);
+        $res = OpenSocial_Saml2_Utils::validateXML($xml, 'saml-schema-metadata-2.0.xsd', $this->_debug);
         if (!$res instanceof DOMDocument) {
             $errors[] = $res;
         } else {
@@ -920,13 +920,13 @@ class OneLogin_Saml2_Settings
                 $validUntil = $cacheDuration = $expireTime = null;
 
                 if ($element->hasAttribute('validUntil')) {
-                    $validUntil = OneLogin_Saml2_Utils::parseSAML2Time($element->getAttribute('validUntil'));
+                    $validUntil = OpenSocial_Saml2_Utils::parseSAML2Time($element->getAttribute('validUntil'));
                 }
                 if ($element->hasAttribute('cacheDuration')) {
                     $cacheDuration = $element->getAttribute('cacheDuration');
                 }
 
-                $expireTime = OneLogin_Saml2_Utils::getExpireTime($cacheDuration, $validUntil);
+                $expireTime = OpenSocial_Saml2_Utils::getExpireTime($cacheDuration, $validUntil);
                 if (isset($expireTime) && time() > $expireTime) {
                     $errors[] = 'expired_xml';
                 }
@@ -944,7 +944,7 @@ class OneLogin_Saml2_Settings
     public function formatIdPCert()
     {
         if (isset($this->_idp['x509cert'])) {
-            $this->_idp['x509cert'] = OneLogin_Saml2_Utils::formatCert($this->_idp['x509cert']);
+            $this->_idp['x509cert'] = OpenSocial_Saml2_Utils::formatCert($this->_idp['x509cert']);
         }
     }
 
@@ -956,12 +956,12 @@ class OneLogin_Saml2_Settings
         if (isset($this->_idp['x509certMulti'])) {
             if (isset($this->_idp['x509certMulti']['signing'])) {
                 foreach ($this->_idp['x509certMulti']['signing'] as $i => $cert) {
-                    $this->_idp['x509certMulti']['signing'][$i] = OneLogin_Saml2_Utils::formatCert($cert);
+                    $this->_idp['x509certMulti']['signing'][$i] = OpenSocial_Saml2_Utils::formatCert($cert);
                 }
             }
             if (isset($this->_idp['x509certMulti']['encryption'])) {
                 foreach ($this->_idp['x509certMulti']['encryption'] as $i => $cert) {
-                    $this->_idp['x509certMulti']['encryption'][$i] = OneLogin_Saml2_Utils::formatCert($cert);
+                    $this->_idp['x509certMulti']['encryption'][$i] = OpenSocial_Saml2_Utils::formatCert($cert);
                 }
             }
         }
@@ -973,7 +973,7 @@ class OneLogin_Saml2_Settings
     public function formatSPCert()
     {
         if (isset($this->_sp['x509cert'])) {
-            $this->_sp['x509cert'] = OneLogin_Saml2_Utils::formatCert($this->_sp['x509cert']);
+            $this->_sp['x509cert'] = OpenSocial_Saml2_Utils::formatCert($this->_sp['x509cert']);
         }
     }
 
@@ -983,7 +983,7 @@ class OneLogin_Saml2_Settings
     public function formatSPCertNew()
     {
         if (isset($this->_sp['x509certNew'])) {
-            $this->_sp['x509certNew'] = OneLogin_Saml2_Utils::formatCert($this->_sp['x509certNew']);
+            $this->_sp['x509certNew'] = OpenSocial_Saml2_Utils::formatCert($this->_sp['x509certNew']);
         }
     }
 
@@ -993,7 +993,7 @@ class OneLogin_Saml2_Settings
     public function formatSPKey()
     {
         if (isset($this->_sp['privateKey'])) {
-            $this->_sp['privateKey'] = OneLogin_Saml2_Utils::formatPrivateKey($this->_sp['privateKey']);
+            $this->_sp['privateKey'] = OpenSocial_Saml2_Utils::formatPrivateKey($this->_sp['privateKey']);
         }
     }
 

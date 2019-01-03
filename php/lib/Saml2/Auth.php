@@ -4,12 +4,12 @@
  * Main class of OneLogin's PHP Toolkit
  *
  */
-class OneLogin_Saml2_Auth
+class OpenSocial_Saml2_Auth
 {
     /**
      * Settings data.
      *
-     * @var OneLogin_Saml2_Settings
+     * @var OpenSocial_Saml2_Settings
      */
     private $_settings;
 
@@ -138,17 +138,17 @@ class OneLogin_Saml2_Auth
      *
      * @param array|object|null $oldSettings Setting data (You can provide a OneLogin_Saml_Settings, the settings object of the Saml folder implementation)
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public function __construct($oldSettings = null)
     {
-        $this->_settings = new OneLogin_Saml2_Settings($oldSettings);
+        $this->_settings = new OpenSocial_Saml2_Settings($oldSettings);
     }
 
     /**
      * Returns the settings info
      *
-     * @return OneLogin_Saml2_Settings The settings data.
+     * @return OpenSocial_Saml2_Settings The settings data.
      */
     public function getSettings()
     {
@@ -160,14 +160,14 @@ class OneLogin_Saml2_Auth
      *
      * @param bool $value Strict parameter
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public function setStrict($value)
     {
         if (!is_bool($value)) {
-            throw new OneLogin_Saml2_Error(
+            throw new OpenSocial_Saml2_Error(
                 'Invalid value passed to setStrict()',
-                OneLogin_Saml2_Error::SETTINGS_INVALID_SYNTAX
+                OpenSocial_Saml2_Error::SETTINGS_INVALID_SYNTAX
             );
         }
 
@@ -179,8 +179,8 @@ class OneLogin_Saml2_Auth
      *
      * @param string|null $requestId The ID of the AuthNRequest sent by this SP to the IdP
      *
-     * @throws OneLogin_Saml2_Error
-     * @throws OneLogin_Saml2_ValidationError
+     * @throws OpenSocial_Saml2_Error
+     * @throws OpenSocial_Saml2_ValidationError
      */
     public function processResponse($requestId = null)
     {
@@ -188,7 +188,7 @@ class OneLogin_Saml2_Auth
         $this->_errorReason = null;
         if (isset($_POST['SAMLResponse'])) {
             // AuthnResponse -- HTTP_POST Binding
-            $response = new OneLogin_Saml2_Response($this->_settings, $_POST['SAMLResponse']);
+            $response = new OpenSocial_Saml2_Response($this->_settings, $_POST['SAMLResponse']);
             $this->_lastResponse = $response->getXMLDocument();
 
             if ($response->isValid($requestId)) {
@@ -209,9 +209,9 @@ class OneLogin_Saml2_Auth
             }
         } else {
             $this->_errors[] = 'invalid_binding';
-            throw new OneLogin_Saml2_Error(
+            throw new OpenSocial_Saml2_Error(
                 'SAML Response not found, Only supported HTTP_POST Binding',
-                OneLogin_Saml2_Error::SAML_RESPONSE_NOT_FOUND
+                OpenSocial_Saml2_Error::SAML_RESPONSE_NOT_FOUND
             );
         }
     }
@@ -227,32 +227,32 @@ class OneLogin_Saml2_Auth
      *
      * @return string|null
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public function processSLO($keepLocalSession = false, $requestId = null, $retrieveParametersFromServer = false, $cbDeleteSession = null, $stay = false)
     {
         $this->_errors = array();
         $this->_errorReason = null;
         if (isset($_GET['SAMLResponse'])) {
-            $logoutResponse = new OneLogin_Saml2_LogoutResponse($this->_settings, $_GET['SAMLResponse']);
+            $logoutResponse = new OpenSocial_Saml2_LogoutResponse($this->_settings, $_GET['SAMLResponse']);
             $this->_lastResponse = $logoutResponse->getXML();
             if (!$logoutResponse->isValid($requestId, $retrieveParametersFromServer)) {
                 $this->_errors[] = 'invalid_logout_response';
                 $this->_errorReason = $logoutResponse->getError();
-            } else if ($logoutResponse->getStatus() !== OneLogin_Saml2_Constants::STATUS_SUCCESS) {
+            } else if ($logoutResponse->getStatus() !== OpenSocial_Saml2_Constants::STATUS_SUCCESS) {
                 $this->_errors[] = 'logout_not_success';
             } else {
                 $this->_lastMessageId = $logoutResponse->id;
                 if (!$keepLocalSession) {
                     if ($cbDeleteSession === null) {
-                        OneLogin_Saml2_Utils::deleteLocalSession();
+                        OpenSocial_Saml2_Utils::deleteLocalSession();
                     } else {
                         call_user_func($cbDeleteSession);
                     }
                 }
             }
         } else if (isset($_GET['SAMLRequest'])) {
-            $logoutRequest = new OneLogin_Saml2_LogoutRequest($this->_settings, $_GET['SAMLRequest']);
+            $logoutRequest = new OpenSocial_Saml2_LogoutRequest($this->_settings, $_GET['SAMLRequest']);
             $this->_lastRequest = $logoutRequest->getXML();
             if (!$logoutRequest->isValid($retrieveParametersFromServer)) {
                 $this->_errors[] = 'invalid_logout_request';
@@ -260,14 +260,14 @@ class OneLogin_Saml2_Auth
             } else {
                 if (!$keepLocalSession) {
                     if ($cbDeleteSession === null) {
-                        OneLogin_Saml2_Utils::deleteLocalSession();
+                        OpenSocial_Saml2_Utils::deleteLocalSession();
                     } else {
                         call_user_func($cbDeleteSession);
                     }
                 }
                 $inResponseTo = $logoutRequest->id;
                 $this->_lastMessageId = $logoutRequest->id;
-                $responseBuilder = new OneLogin_Saml2_LogoutResponse($this->_settings);
+                $responseBuilder = new OpenSocial_Saml2_LogoutResponse($this->_settings);
                 $responseBuilder->build($inResponseTo);
                 $this->_lastResponse = $responseBuilder->getXML();
 
@@ -289,9 +289,9 @@ class OneLogin_Saml2_Auth
             }
         } else {
             $this->_errors[] = 'invalid_binding';
-            throw new OneLogin_Saml2_Error(
+            throw new OpenSocial_Saml2_Error(
                 'SAML LogoutRequest/LogoutResponse not found. Only supported HTTP_REDIRECT Binding',
-                OneLogin_Saml2_Error::SAML_LOGOUTMESSAGE_NOT_FOUND
+                OpenSocial_Saml2_Error::SAML_LOGOUTMESSAGE_NOT_FOUND
             );
         }
     }
@@ -306,7 +306,7 @@ class OneLogin_Saml2_Auth
      *
      * @return string|null
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public function redirectTo($url = '', $parameters = array(), $stay = false)
     {
@@ -317,7 +317,7 @@ class OneLogin_Saml2_Auth
             $url = $_REQUEST['RelayState'];
         }
 
-        return OneLogin_Saml2_Utils::redirect($url, $parameters, $stay);
+        return OpenSocial_Saml2_Utils::redirect($url, $parameters, $stay);
     }
 
     /**
@@ -468,13 +468,13 @@ class OneLogin_Saml2_Auth
      *
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public function login($returnTo = null, $parameters = array(), $forceAuthn = false, $isPassive = false, $stay = false, $setNameIdPolicy = true)
     {
         assert('is_array($parameters)');
 
-        $authnRequest = new OneLogin_Saml2_AuthnRequest($this->_settings, $forceAuthn, $isPassive, $setNameIdPolicy);
+        $authnRequest = new OpenSocial_Saml2_AuthnRequest($this->_settings, $forceAuthn, $isPassive, $setNameIdPolicy);
 
         $this->_lastRequest = $authnRequest->getXML();
         $this->_lastRequestID = $authnRequest->getId();
@@ -485,7 +485,7 @@ class OneLogin_Saml2_Auth
         if (!empty($returnTo)) {
             $parameters['RelayState'] = $returnTo;
         } else {
-            $parameters['RelayState'] = OneLogin_Saml2_Utils::getSelfRoutedURLNoQuery();
+            $parameters['RelayState'] = OpenSocial_Saml2_Utils::getSelfRoutedURLNoQuery();
         }
 
         $security = $this->_settings->getSecurityData();
@@ -510,7 +510,7 @@ class OneLogin_Saml2_Auth
      *
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public function logout($returnTo = null, $parameters = array(), $nameId = null, $sessionIndex = null, $stay = false, $nameIdFormat = null, $nameIdNameQualifier = null)
     {
@@ -518,9 +518,9 @@ class OneLogin_Saml2_Auth
 
         $sloUrl = $this->getSLOurl();
         if (empty($sloUrl)) {
-            throw new OneLogin_Saml2_Error(
+            throw new OpenSocial_Saml2_Error(
                 'The IdP does not support Single Log Out',
-                OneLogin_Saml2_Error::SAML_SINGLE_LOGOUT_NOT_SUPPORTED
+                OpenSocial_Saml2_Error::SAML_SINGLE_LOGOUT_NOT_SUPPORTED
             );
         }
 
@@ -531,7 +531,7 @@ class OneLogin_Saml2_Auth
             $nameIdFormat = $this->_nameidFormat;
         }
 
-        $logoutRequest = new OneLogin_Saml2_LogoutRequest($this->_settings, null, $nameId, $sessionIndex, $nameIdFormat, $nameIdNameQualifier);
+        $logoutRequest = new OpenSocial_Saml2_LogoutRequest($this->_settings, null, $nameId, $sessionIndex, $nameIdFormat, $nameIdNameQualifier);
 
         $this->_lastRequest = $logoutRequest->getXML();
         $this->_lastRequestID = $logoutRequest->id;
@@ -542,7 +542,7 @@ class OneLogin_Saml2_Auth
         if (!empty($returnTo)) {
             $parameters['RelayState'] = $returnTo;
         } else {
-            $parameters['RelayState'] = OneLogin_Saml2_Utils::getSelfRoutedURLNoQuery();
+            $parameters['RelayState'] = OpenSocial_Saml2_Utils::getSelfRoutedURLNoQuery();
         }
 
         $security = $this->_settings->getSecurityData();
@@ -600,7 +600,7 @@ class OneLogin_Saml2_Auth
      *
      * @return string A base64 encoded signature
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public function buildRequestSignature($samlRequest, $relayState, $signAlgorithm = XMLSecurityKey::RSA_SHA1)
     {
@@ -616,7 +616,7 @@ class OneLogin_Saml2_Auth
      *
      * @return string A base64 encoded signature
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public function buildResponseSignature($samlResponse, $relayState, $signAlgorithm = XMLSecurityKey::RSA_SHA1)
     {
@@ -633,7 +633,7 @@ class OneLogin_Saml2_Auth
      *
      * @return string A base64 encoded signature
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     private function buildMessageSignature($samlMessage, $relayState, $signAlgorithm = XMLSecurityKey::RSA_SHA256, $type="SAMLRequest")
     {
@@ -645,7 +645,7 @@ class OneLogin_Saml2_Auth
                 $errorMsg = "Trying to sign the SAML Response but can't load the SP private key";
             }
 
-            throw new OneLogin_Saml2_Error($errorMsg, OneLogin_Saml2_Error::PRIVATE_KEY_NOT_FOUND);
+            throw new OpenSocial_Saml2_Error($errorMsg, OpenSocial_Saml2_Error::PRIVATE_KEY_NOT_FOUND);
         }
 
         $objKey = new XMLSecurityKey($signAlgorithm, array('type' => 'private'));

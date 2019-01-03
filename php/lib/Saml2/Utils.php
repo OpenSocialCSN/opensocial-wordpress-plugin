@@ -6,7 +6,7 @@
  * Defines several often used methods
  */
 
-class OneLogin_Saml2_Utils
+class OpenSocial_Saml2_Utils
 {
     const RESPONSE_SIGNATURE_XPATH = "/samlp:Response/ds:Signature";
     const ASSERTION_SIGNATURE_XPATH = "/samlp:Response/saml:Assertion/ds:Signature";
@@ -232,14 +232,14 @@ class OneLogin_Saml2_Utils
         $key = str_replace(array("\x0D", "\r", "\n"), "", $key);
         if (!empty($key)) {
             if (strpos($key, '-----BEGIN PRIVATE KEY-----') !== false) {
-                $key = OneLogin_Saml2_Utils::getStringBetween($key, '-----BEGIN PRIVATE KEY-----', '-----END PRIVATE KEY-----');
+                $key = OpenSocial_Saml2_Utils::getStringBetween($key, '-----BEGIN PRIVATE KEY-----', '-----END PRIVATE KEY-----');
                 $key = str_replace(' ', '', $key);
 
                 if ($heads) {
                     $key = "-----BEGIN PRIVATE KEY-----\n".chunk_split($key, 64, "\n")."-----END PRIVATE KEY-----\n";
                 }
             } else if (strpos($key, '-----BEGIN RSA PRIVATE KEY-----') !== false) {
-                $key = OneLogin_Saml2_Utils::getStringBetween($key, '-----BEGIN RSA PRIVATE KEY-----', '-----END RSA PRIVATE KEY-----');
+                $key = OpenSocial_Saml2_Utils::getStringBetween($key, '-----BEGIN RSA PRIVATE KEY-----', '-----END RSA PRIVATE KEY-----');
                 $key = str_replace(' ', '', $key);
 
                 if ($heads) {
@@ -289,7 +289,7 @@ class OneLogin_Saml2_Utils
      *
      * @return string|null $url
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OpenSocial_Saml2_Error
      */
     public static function redirect($url, $parameters = array(), $stay = false)
     {
@@ -307,9 +307,9 @@ class OneLogin_Saml2_Utils
         $wrongProtocol = !preg_match(self::$_protocolRegex, $url);
         $url = filter_var($url, FILTER_VALIDATE_URL);
         if ($wrongProtocol || empty($url)) {
-            throw new OneLogin_Saml2_Error(
+            throw new OpenSocial_Saml2_Error(
                 'Redirect to invalid URL: ' . $url,
-                OneLogin_Saml2_Error::REDIRECT_INVALID_URL
+                OpenSocial_Saml2_Error::REDIRECT_INVALID_URL
             );
         }
 
@@ -902,13 +902,13 @@ class OneLogin_Saml2_Utils
     public static function query($dom, $query, $context = null)
     {
         $xpath = new DOMXPath($dom);
-        $xpath->registerNamespace('samlp', OneLogin_Saml2_Constants::NS_SAMLP);
-        $xpath->registerNamespace('saml', OneLogin_Saml2_Constants::NS_SAML);
-        $xpath->registerNamespace('ds', OneLogin_Saml2_Constants::NS_DS);
-        $xpath->registerNamespace('xenc', OneLogin_Saml2_Constants::NS_XENC);
-        $xpath->registerNamespace('xsi', OneLogin_Saml2_Constants::NS_XSI);
-        $xpath->registerNamespace('xs', OneLogin_Saml2_Constants::NS_XS);
-        $xpath->registerNamespace('md', OneLogin_Saml2_Constants::NS_MD);
+        $xpath->registerNamespace('samlp', OpenSocial_Saml2_Constants::NS_SAMLP);
+        $xpath->registerNamespace('saml', OpenSocial_Saml2_Constants::NS_SAML);
+        $xpath->registerNamespace('ds', OpenSocial_Saml2_Constants::NS_DS);
+        $xpath->registerNamespace('xenc', OpenSocial_Saml2_Constants::NS_XENC);
+        $xpath->registerNamespace('xsi', OpenSocial_Saml2_Constants::NS_XSI);
+        $xpath->registerNamespace('xs', OpenSocial_Saml2_Constants::NS_XS);
+        $xpath->registerNamespace('md', OpenSocial_Saml2_Constants::NS_MD);
 
         if (isset($context)) {
             $res = $xpath->query($query, $context);
@@ -938,7 +938,7 @@ class OneLogin_Saml2_Utils
     public static function deleteLocalSession()
     {
 
-        if (OneLogin_Saml2_Utils::isSessionStarted()) {
+        if (OpenSocial_Saml2_Utils::isSessionStarted()) {
             session_destroy();
         }
 
@@ -1079,7 +1079,7 @@ class OneLogin_Saml2_Utils
      *
      * @return array $status The Status, an array with the code and a message.
      *
-     * @throws OneLogin_Saml2_ValidationError
+     * @throws OpenSocial_Saml2_ValidationError
      */
     public static function getStatus($dom)
     {
@@ -1087,17 +1087,17 @@ class OneLogin_Saml2_Utils
 
         $statusEntry = self::query($dom, '/samlp:Response/samlp:Status');
         if ($statusEntry->length != 1) {
-            throw new OneLogin_Saml2_ValidationError(
+            throw new OpenSocial_Saml2_ValidationError(
                 "Missing Status on response",
-                OneLogin_Saml2_ValidationError::MISSING_STATUS
+                OpenSocial_Saml2_ValidationError::MISSING_STATUS
             );
         }
 
         $codeEntry = self::query($dom, '/samlp:Response/samlp:Status/samlp:StatusCode', $statusEntry->item(0));
         if ($codeEntry->length != 1) {
-            throw new OneLogin_Saml2_ValidationError(
+            throw new OpenSocial_Saml2_ValidationError(
                 "Missing Status Code on response",
-                OneLogin_Saml2_ValidationError::MISSING_STATUS_CODE
+                OpenSocial_Saml2_ValidationError::MISSING_STATUS_CODE
             );
         }
         $code = $codeEntry->item(0)->getAttribute('Value');
@@ -1127,7 +1127,7 @@ class OneLogin_Saml2_Utils
      *
      * @return DOMElement  The decrypted element.
      *
-     * @throws OneLogin_Saml2_ValidationError
+     * @throws OpenSocial_Saml2_ValidationError
      */
     public static function decryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, $formatOutput = true)
     {
@@ -1139,17 +1139,17 @@ class OneLogin_Saml2_Utils
 
         $symmetricKey = $enc->locateKey($encryptedData);
         if (!$symmetricKey) {
-            throw new OneLogin_Saml2_ValidationError(
+            throw new OpenSocial_Saml2_ValidationError(
                 'Could not locate key algorithm in encrypted data.',
-                OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
+                OpenSocial_Saml2_ValidationError::KEY_ALGORITHM_ERROR
             );
         }
 
         $symmetricKeyInfo = $enc->locateKeyInfo($symmetricKey);
         if (!$symmetricKeyInfo) {
-            throw new OneLogin_Saml2_ValidationError(
+            throw new OpenSocial_Saml2_ValidationError(
                 "Could not locate <dsig:KeyInfo> for the encrypted key.",
-                OneLogin_Saml2_ValidationError::KEYINFO_NOT_FOUND_IN_ENCRYPTED_DATA
+                OpenSocial_Saml2_ValidationError::KEYINFO_NOT_FOUND_IN_ENCRYPTED_DATA
             );
         }
 
@@ -1162,12 +1162,12 @@ class OneLogin_Saml2_Utils
             }
 
             if ($inputKeyAlgo !== $symKeyInfoAlgo) {
-                throw new OneLogin_Saml2_ValidationError(
+                throw new OpenSocial_Saml2_ValidationError(
                     'Algorithm mismatch between input key and key used to encrypt ' .
                     ' the symmetric key for the message. Key was: ' .
                     var_export($inputKeyAlgo, true) . '; message was: ' .
                     var_export($symKeyInfoAlgo, true),
-                    OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
+                    OpenSocial_Saml2_ValidationError::KEY_ALGORITHM_ERROR
                 );
             }
 
@@ -1176,9 +1176,9 @@ class OneLogin_Saml2_Utils
             $keySize = $symmetricKey->getSymmetricKeySize();
             if ($keySize === null) {
                 // To protect against "key oracle" attacks
-                throw new OneLogin_Saml2_ValidationError(
+                throw new OpenSocial_Saml2_ValidationError(
                     'Unknown key size for encryption algorithm: ' . var_export($symmetricKey->type, true),
-                    OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
+                    OpenSocial_Saml2_ValidationError::KEY_ALGORITHM_ERROR
                 );
             }
 
@@ -1200,11 +1200,11 @@ class OneLogin_Saml2_Utils
         } else {
             $symKeyAlgo = $symmetricKey->getAlgorithm();
             if ($inputKeyAlgo !== $symKeyAlgo) {
-                throw new OneLogin_Saml2_ValidationError(
+                throw new OpenSocial_Saml2_ValidationError(
                     'Algorithm mismatch between input key and key in message. ' .
                     'Key was: ' . var_export($inputKeyAlgo, true) . '; message was: ' .
                     var_export($symKeyAlgo, true),
-                    OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
+                    OpenSocial_Saml2_ValidationError::KEY_ALGORITHM_ERROR
                 );
             }
             $symmetricKey = $inputKey;
@@ -1220,17 +1220,17 @@ class OneLogin_Saml2_Utils
         }
         $newDoc = self::loadXML($newDoc, $xml);
         if (!$newDoc) {
-            throw new OneLogin_Saml2_ValidationError(
+            throw new OpenSocial_Saml2_ValidationError(
                 'Failed to parse decrypted XML.',
-                OneLogin_Saml2_ValidationError::INVALID_XML_FORMAT
+                OpenSocial_Saml2_ValidationError::INVALID_XML_FORMAT
             );
         }
 
         $decryptedElement = $newDoc->firstChild->firstChild;
         if ($decryptedElement === null) {
-            throw new OneLogin_Saml2_ValidationError(
+            throw new OpenSocial_Saml2_ValidationError(
                 'Missing encrypted element.',
-                OneLogin_Saml2_ValidationError::MISSING_ENCRYPTED_ELEMENT
+                OpenSocial_Saml2_ValidationError::MISSING_ENCRYPTED_ELEMENT
             );
         }
 
@@ -1257,7 +1257,7 @@ class OneLogin_Saml2_Utils
             return $key;
         }
 
-        if (!OneLogin_Saml2_Utils::isSupportedSigningAlgorithm($algorithm)) {
+        if (!OpenSocial_Saml2_Utils::isSupportedSigningAlgorithm($algorithm)) {
             throw new Exception('Unsupported signing algorithm.');
         }
 
@@ -1387,7 +1387,7 @@ class OneLogin_Saml2_Utils
         $objXMLSecDSig->idKeys = array('ID');
 
         if ($xpath) {
-            $nodeset = OneLogin_Saml2_Utils::query($dom, $xpath);
+            $nodeset = OpenSocial_Saml2_Utils::query($dom, $xpath);
             $objDSig = $nodeset->item(0);
             $objXMLSecDSig->sigNode = $objDSig;
         } else {
@@ -1403,7 +1403,7 @@ class OneLogin_Saml2_Utils
             throw new Exception('We have no idea about the key');
         }
 
-        if (!OneLogin_Saml2_Utils::isSupportedSigningAlgorithm($objKey->type)) {
+        if (!OpenSocial_Saml2_Utils::isSupportedSigningAlgorithm($objKey->type)) {
             throw new Exception('Unsupported signing algorithm.');
         }
 
@@ -1440,8 +1440,8 @@ class OneLogin_Saml2_Utils
             } else {
                 if (!empty($fingerprint)) {
                     $domCert = $objKey->getX509Certificate();
-                    $domCertFingerprint = OneLogin_Saml2_Utils::calculateX509Fingerprint($domCert, $fingerprintalg);
-                    if (OneLogin_Saml2_Utils::formatFingerPrint($fingerprint) == $domCertFingerprint) {
+                    $domCertFingerprint = OpenSocial_Saml2_Utils::calculateX509Fingerprint($domCert, $fingerprintalg);
+                    if (OpenSocial_Saml2_Utils::formatFingerPrint($fingerprint) == $domCertFingerprint) {
                         $objKey->loadKey($domCert, false, true);
                         if ($objXMLSecDSig->verify($objKey) === 1) {
                             $valid = true;
@@ -1475,11 +1475,11 @@ class OneLogin_Saml2_Utils
         }
 
         if ($retrieveParametersFromServer) {
-            $signedQuery = $messageType.'='.OneLogin_Saml2_Utils::extractOriginalQueryParam($messageType);
+            $signedQuery = $messageType.'='.OpenSocial_Saml2_Utils::extractOriginalQueryParam($messageType);
             if (isset($getData['RelayState'])) {
-                $signedQuery .= '&RelayState='.OneLogin_Saml2_Utils::extractOriginalQueryParam('RelayState');
+                $signedQuery .= '&RelayState='.OpenSocial_Saml2_Utils::extractOriginalQueryParam('RelayState');
             }
-            $signedQuery .= '&SigAlg='.OneLogin_Saml2_Utils::extractOriginalQueryParam('SigAlg');
+            $signedQuery .= '&SigAlg='.OpenSocial_Saml2_Utils::extractOriginalQueryParam('SigAlg');
         } else {
             $signedQuery = $messageType.'='.urlencode($getData[$messageType]);
             if (isset($getData['RelayState'])) {
@@ -1495,9 +1495,9 @@ class OneLogin_Saml2_Utils
         }
         $existsMultiX509Sign = isset($idpData['x509certMulti']) && isset($idpData['x509certMulti']['signing']) && !empty($idpData['x509certMulti']['signing']);
         if ((!isset($idpData['x509cert']) || empty($idpData['x509cert'])) && !$existsMultiX509Sign) {
-            throw new OneLogin_Saml2_Error(
+            throw new OpenSocial_Saml2_Error(
                 "In order to validate the sign on the ".$strMessageType.", the x509cert of the IdP is required",
-                OneLogin_Saml2_Error::CERT_NOT_FOUND
+                OpenSocial_Saml2_Error::CERT_NOT_FOUND
             );
         }
 
@@ -1514,11 +1514,11 @@ class OneLogin_Saml2_Utils
 
             if ($signAlg != XMLSecurityKey::RSA_SHA1) {
                 try {
-                    $objKey = OneLogin_Saml2_Utils::castKey($objKey, $signAlg, 'public');
+                    $objKey = OpenSocial_Saml2_Utils::castKey($objKey, $signAlg, 'public');
                 } catch (Exception $e) {
-                    $ex = new OneLogin_Saml2_ValidationError(
+                    $ex = new OpenSocial_Saml2_ValidationError(
                         "Invalid signAlg in the recieved ".$strMessageType,
-                        OneLogin_Saml2_ValidationError::INVALID_SIGNATURE
+                        OpenSocial_Saml2_ValidationError::INVALID_SIGNATURE
                     );
                     if (count($multiCerts) == 1) {
                         throw $ex;
