@@ -378,4 +378,9 @@ function osl_saml_custom_login_footer() {
     echo '<div style="font-size: 110%;padding:8px;background: #fff;text-align: center;"><a href="'.esc_url( get_site_url().'/wp-login.php?saml_sso') .'">'.esc_html($saml_login_message).'</a></div>';
 }
 
+function osl_op_sanitize_text($data)
+{
+	return sanitize_text_field($data);
+}
+
 ?>
