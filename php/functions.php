@@ -28,7 +28,7 @@ function osl_op_get_domain_name () {
 }
 
 function osl_saml_lostpassword() {
-	$target = get_option('onelogin_saml_customize_links_lost_password');
+	$target = get_option('opensocial_saml_customize_links_lost_password');
 	if (!empty($target)) {
 		wp_redirect($target);
 		exit;
@@ -75,7 +75,7 @@ function osl_initialize_saml() {
 	}
 
 	try {
-		$auth = new Onelogin_Saml2_Auth($settings);
+		$auth = new OpenSocial_Saml2_Auth($settings);
 	} catch (Exception $e) {
 		echo '<br>'.__("The OpenSocial SSO/SAML plugin is not correctly configured.", 'opensocial-saml-sso').'<br>';
 		echo esc_html($e->getMessage());
@@ -90,7 +90,7 @@ function osl_saml_metadata() {
 	require_once plugin_dir_path(__FILE__).'_toolkit_loader.php';
 	require plugin_dir_path(__FILE__).'settings.php';
 
-	$samlSettings = new OneLogin_Saml2_Settings($settings, true);
+	$samlSettings = new OpenSocial_Saml2_Settings($settings, true);
 	$metadata = $samlSettings->getSPMetadata();
 
 	header('Content-Type: text/xml');
@@ -252,7 +252,7 @@ function osl_saml_acs() {
 		$user_role = $user_meta->roles;
 		
 		if (is_multisite() && !is_user_member_of_blog($user_id, $blog_id)) {
-			if (get_option('onelogin_saml_autocreate')) {
+			if (get_option('opensocial_saml_autocreate')) {
 				//Exist's but is not user to the current blog id
 				$blog_id = get_current_blog_id();
 				$result = add_user_to_blog($blog_id, $user_id, $userdata['role']);
@@ -371,7 +371,7 @@ function osl_saml_sls() {
 }
 
 function osl_saml_custom_login_footer() {
-	$saml_login_message = get_option('onelogin_saml_customize_links_saml_login');
+	$saml_login_message = get_option('opensocial_saml_customize_links_saml_login');
 	if (empty($saml_login_message)) {
 		$saml_login_message = "OpenSocial SAML Login";
 	}
