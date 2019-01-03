@@ -204,20 +204,20 @@ function opensocial_saml_configuration() {
   add_settings_section('permissions', __('Permissions', 'opensocial-saml-sso'), 'plugin_permission_text', $option_group);
   register_setting($option_group, 'opensocial_permission_enabled');
   add_settings_field('opensocial_permission_enabled', __('Permission Type', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_permission_enabled", $option_group, 'permissions');
-  register_setting($option_group, 'opensocial_closed_message');
+  register_setting($option_group, 'opensocial_closed_message', 'osl_op_sanitize_text');
   add_settings_field('opensocial_closed_message', __('', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_closed_enabled", $option_group, 'permissions');
 
   /* Terms of use */
   add_settings_section('site_branding', __('Site Branding', 'opensocial-saml-sso'), 'plugin_branding_text', $option_group);
-  register_setting($option_group, 'opensocial_terms_enabled');
+  register_setting($option_group, 'opensocial_terms_enabled', 'osl_op_sanitize_text');
   add_settings_field('opensocial_terms_enabled', __('Terms of use URL', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_terms_enabled", $option_group, 'site_branding');
-  register_setting($option_group, 'opensocial_privacy_enabled');
+  register_setting($option_group, 'opensocial_privacy_enabled', 'osl_op_sanitize_text');
   add_settings_field('opensocial_privacy_enabled', __('Privacy URL', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_privacy_enabled", $option_group, 'site_branding');
-  register_setting($option_group, 'opensocial_announce_message_title');
+  register_setting($option_group, 'opensocial_announce_message_title', 'osl_op_sanitize_text');
   add_settings_field('opensocial_announce_message_title', __('Message Title', 'opensocial-saml-sso'), "opensocial_announce_message_title", $option_group, 'site_branding');
-  register_setting($option_group, 'opensocial_announce_message');
+  register_setting($option_group, 'opensocial_announce_message', 'osl_op_sanitize_text');
   add_settings_field('opensocial_announce_message', __('Message Details', 'opensocial-saml-sso'), "opensocial_announce_message", $option_group, 'site_branding');
-  register_setting($option_group, 'opensocial_help_enabled');
+  register_setting($option_group, 'opensocial_help_enabled', 'osl_op_sanitize_text');
   add_settings_field('opensocial_help_enabled', __('Need Help?', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_help_enabled", $option_group, 'site_branding');
 
 }
