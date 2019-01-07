@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== OpenSocial Login  ===
 Contributors: lablynx
 Tags: OpenSocial,SSO, Single Sign On, linkedin, facebook, goolge, authentication
 Requires at least: 5.0
