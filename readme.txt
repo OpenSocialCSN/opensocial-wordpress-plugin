@@ -2,7 +2,9 @@
 Contributors: lablynx
 Tags: OpenSocial,SSO, Single Sign On, linkedin, facebook, goolge, authentication
 Requires at least: 5.0
-Tested up to: 7.1
+Tested up to: 4.9.4
+Requires PHP: 5.6
+Version: 0.1.0
 Stable tag: 0.1.0
 License: MIT
 License URI: http://opensource.org/licenses/mit-license.html
