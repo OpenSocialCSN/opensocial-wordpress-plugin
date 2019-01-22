@@ -64,6 +64,26 @@ function plugin_setting_boolean_opensocial_saml_enabled() {
       '<p class="description">'.__("Check it in order to enable the SAML plugin.", 'opensocial-saml-sso').'</p>';
 }
 
+function plugin_setting_boolean_opensocial_social_auth() {
+
+  $options = get_option( 'opensocial_social_auth' );
+  $email = get_option( 'opensocial_email_login' );
+
+  $linkedin = in_array('linkedin', $options['social_login']) ? 'checked' : '';
+  $google = in_array('google', $options['social_login']) ? 'checked' : '';
+  $facebook = in_array('facebook', $options['social_login']) ? 'checked' : '';
+  $github = in_array('github', $options['social_login']) ? 'checked' : '';
+  $twitter = in_array('twitter', $options['social_login']) ? 'checked' : '';
+  
+  echo '<i class="fa fa-linkedin op-social-font"></i> &nbsp;<input type="checkbox" name="opensocial_social_auth[social_login][]" value="linkedin" '.$linkedin.'>&nbsp; &nbsp;';
+  echo '<i class="fa fa-google op-social-font"></i> &nbsp;<input type="checkbox" name="opensocial_social_auth[social_login][]" value="google" '.$google.'>&nbsp; &nbsp;';
+  echo '<i class="fa fa-facebook op-social-font"></i> &nbsp;<input type="checkbox" name="opensocial_social_auth[social_login][]" value="facebook" '.$facebook.'>&nbsp; &nbsp;';
+  echo '<i class="fa fa-github op-social-font"></i> &nbsp;<input type="checkbox" name="opensocial_social_auth[social_login][]" value="github" '.$github.'>&nbsp; &nbsp;';
+  echo '<i class="fa fa-twitter op-social-font"></i> &nbsp;<input type="checkbox" name="opensocial_social_auth[social_login][]" value="twitter" '.$twitter.'>&nbsp; &nbsp;';
+  echo 'Email &nbsp;<input type="checkbox" name="opensocial_email_login" value="email" '.($email ? 'checked': '').'>';
+  
+}
+
 function plugin_setting_boolean_opensocial_saml_keep_local_login() {
   $value = get_option('opensocial_saml_keep_local_login');
   echo '<input type="checkbox" name="opensocial_saml_keep_local_login" id="opensocial_saml_keep_local_login"
@@ -81,6 +101,10 @@ function plugin_permission_text() {
 
 function plugin_branding_text() {
   echo "<p>".__("Enter terms of use and privacy url which will display on login page.", 'opensocial-saml-sso')."</p>";
+}
+
+function social_login_text() {
+  echo "<p>".__("Select social login for authentication", 'opensocial-saml-sso')."</p>";
 }
 
 function plugin_setting_boolean_opensocial_permission_enabled() {
@@ -146,18 +170,20 @@ function opensocial_saml_configuration_render() {
 
         <!-- Update privacy and terms of url in opensocial databaes -->
         <?php
-        $post_data = array(
-          'identity'  => esc_url(get_site_url()),
-          'terms_of_use' => esc_attr(get_option('opensocial_terms_enabled')),
-          'privacy_statement' => esc_attr(get_option('opensocial_privacy_enabled')),
-          'need_help' => esc_attr(get_option('opensocial_help_enabled')),
-          'site_mode' => esc_attr(get_option('opensocial_permission_enabled')),
-          'message_title' => esc_attr(get_option('opensocial_announce_message_title')),
-          'message' => esc_attr(get_option('opensocial_announce_message')),
-          'closed_message' => esc_attr(get_option('opensocial_closed_message'))
-        );
-        $data = json_encode($post_data);
-        $msg = $api->updateData('subscriber', $data);
+          $post_data = array(
+            'identity'  => esc_url(get_site_url()),
+            'terms_of_use' => esc_attr(get_option('opensocial_terms_enabled')),
+            'privacy_statement' => esc_attr(get_option('opensocial_privacy_enabled')),
+            'need_help' => esc_attr(get_option('opensocial_help_enabled')),
+            'site_mode' => esc_attr(get_option('opensocial_permission_enabled')),
+            'message_title' => esc_attr(get_option('opensocial_announce_message_title')),
+            'message' => esc_attr(get_option('opensocial_announce_message')),
+            'closed_message' => esc_attr(get_option('opensocial_closed_message')),
+            'auth_options' => get_option('opensocial_social_auth'),
+            'email_login' => esc_attr(get_option('opensocial_email_login'))
+          );
+          $data = json_encode($post_data);
+          $msg = $api->updateData('subscriber', $data);
         ?>
 
       </form>
@@ -220,6 +246,14 @@ function opensocial_saml_configuration() {
   register_setting($option_group, 'opensocial_help_enabled', 'osl_op_sanitize_text');
   add_settings_field('opensocial_help_enabled', __('Need Help?', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_help_enabled", $option_group, 'site_branding');
 
+  /* Social Logins */
+  add_settings_section('social_login', __('Authentication Options', 'opensocial-saml-sso'), 'social_login_text', $option_group);
+  register_setting($option_group, 'opensocial_social_auth');
+  register_setting($option_group, 'opensocial_email_login');
+  add_settings_field('opensocial_social_auth', __('Choose Login Type:', 'opensocial-saml-sso'), "plugin_setting_boolean_opensocial_social_auth", $option_group, 'social_login');
+
+
+  
 }
 
 add_action( 'admin_footer', 'display_closed_message_box' );

@@ -55,3 +55,8 @@
 .opensocial_login_button:hover {
   background: rgba(30, 115, 190, 1) !important;
 }
+
+.op-social-font {
+  font-size: 19px !important;
+  vertical-align: middle;
+}
