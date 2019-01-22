@@ -63,9 +63,9 @@ jQ==
     update_option('opensocial_saml_advanced_digestalgorithm', 'http://www.w3.org/2000/09/xmldsig#rsa-sha1');
     update_option('opensocial_saml_advanced_nameidformat', 'emailAddress');
     update_option('opensocial_saml_advanced_settings_sp_entity_id',  esc_url(get_site_url()));
-    //update_option('opensocial_terms_enabled',  esc_url(get_site_url()));
-    //update_option('opensocial_privacy_enabled',  esc_url(get_site_url()));
     update_option('opensocial_permission_enabled',  'Open');
+    update_option('opensocial_social_auth', array('social_login' => array('linkedin','google','facebook','github','twitter')));
+    update_option('opensocial_email_login', 'email');
 
     return true;
 
@@ -108,6 +108,8 @@ jQ==
     delete_option('opensocial_announce_message_title');
     delete_option('opensocial_announce_message');
     delete_option('opensocial_closed_message');
+    delete_option('opensocial_social_auth');
+    delete_option('opensocial_email_login');
     return true;
 
   }

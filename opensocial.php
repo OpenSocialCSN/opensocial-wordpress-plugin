@@ -4,7 +4,7 @@ Plugin Name: OpenSocial Login
 Plugin URI: https://github.com/OpenSocialCSN/opensocial-wordpress-plugin
 Description: OpenSocial Wordpress Plugin is a plugin allowing your users to easily authenticate into your Wordpress site. OpenSocial is a SSO one-click service allowing users to authenticate with their Google, Facebook, Twitter, LinkedIn, Github or OpenSocial accounts. The OpenSocial Wordpress Plugin is backed by the OpenSocial SSO service.
 Author: LabLynx, Inc.
-Version: 2.8.0
+Version: 0.1.0
 Author URI: https://www.lablynx.com
 */
 
@@ -13,11 +13,14 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 function osl_op_register_script() {
-  wp_register_style('opensocial_login_style', plugins_url('/css/opensocial_login_style.css', __FILE__), false, '1.0.8', 'all');
+	wp_register_style('opensocial_login_style', plugins_url('/css/opensocial_login_style.css', __FILE__), false, '1.0.10', 'all');
+	wp_register_style('opensocial_font_awesome', 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', false, NULL, 'all');
+
 }
 
 function osl_op_enqueue_style(){
 	wp_enqueue_style( 'opensocial_login_style' );
+	wp_enqueue_style( 'opensocial_font_awesome' );
 	wp_enqueue_media();
 }
 
