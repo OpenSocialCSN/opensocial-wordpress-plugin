@@ -178,6 +178,7 @@ function osl_saml_acs() {
 		exit();
 	}
 
+	/* Get persmission from wordpress options */
 	$permission = get_option('opensocial_permission_enabled');
 
 	$auth->processResponse();
@@ -188,7 +189,7 @@ function osl_saml_acs() {
 		foreach($errors as $error) {
 			echo esc_html($error).'<br>';
 		}
-		echo __("Contact the administrator");
+		echo __("Contact the system administrator");
 		exit();
 	}
 

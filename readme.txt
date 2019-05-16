@@ -2,10 +2,10 @@
 Contributors: lablynx
 Tags: OpenSocial,SSO, Single Sign On, linkedin, facebook, goolge, authentication
 Requires at least: 5.1
-Tested up to: 5.2.0
+Tested up to: 5.2
 Requires PHP: 5.6
-Version: 0.1.3
-Stable tag: 0.1.3
+Version: 0.1.4
+Stable tag: 0.1.4
 License: MIT
 License URI: http://opensource.org/licenses/mit-license.html
 
@@ -43,6 +43,9 @@ Integrate Wordpress site with OpenSocial Single Sign On
 
 
 == Change Log ==
+
+= 0.1.4 =
+* Fixed auth errors
 
 = 0.1.3 =
 * Fixed redirection after login
