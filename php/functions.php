@@ -198,7 +198,7 @@ function osl_saml_acs() {
 		$email = $username;
 	} else {
 		$usernameMapping = get_option('opensocial_saml_attr_mapping_username');
-		$mailMapping =  get_option('opensocial_saml_attr_mapping_mail'); 
+		$mailMapping =  get_option('opensocial_saml_attr_mapping_mail');
 
 		if (!empty($usernameMapping) && isset($attrs[$usernameMapping]) && !empty($attrs[$usernameMapping][0])){
 			$username = $attrs[$usernameMapping][0];
@@ -313,8 +313,9 @@ function osl_saml_acs() {
 		} else {
 			if (strpos($_REQUEST['RelayState'], 'redirect_to') !== false) {
 				$query = wp_parse_url($_REQUEST['RelayState'], PHP_URL_QUERY);
-				parse_str( $query, $parameters );
-				wp_redirect(urldecode($parameters['redirect_to']));
+				//parse_str( $query, $parameters );
+				//wp_redirect(urldecode($parameters['redirect_to']));
+				wp_redirect(urldecode(explode("redirect_to=/",$query)[1]));
 			}  else {
 				wp_redirect($_REQUEST['RelayState']);
 			}
