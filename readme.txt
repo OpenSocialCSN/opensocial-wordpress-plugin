@@ -44,6 +44,9 @@ Integrate Wordpress site with OpenSocial Single Sign On
 
 == Change Log ==
 
+= 0.1.2 =
+* Added new short code for login page query parameters
+
 = 0.1.1 =
 * Choice of authentication types implemented
 
